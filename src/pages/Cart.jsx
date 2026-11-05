@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import { formatPrice } from '../data/menu.js';
+import ProductImage from '../components/ProductImage.jsx';
 import styles from './Cart.module.css';
 
 export default function Cart() {
@@ -22,7 +23,12 @@ export default function Cart() {
             <ul className={styles.list}>
               {items.map((line) => (
                 <li className={styles.line} key={line.lineId}>
-                  {line.image ? <img src={line.image} alt="" /> : null}
+                  <ProductImage
+                    image={line.image}
+                    alt=""
+                    label={line.categoryName}
+                    className={styles.productImage}
+                  />
 
                   <div className={styles.lineInfo}>
                     <h2 className={styles.lineName}>{line.name}</h2>

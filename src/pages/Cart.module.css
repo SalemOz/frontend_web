@@ -38,10 +38,9 @@
   background: var(--card);
 }
 
-.line img {
+.productImage {
   width: 72px;
   height: 72px;
-  object-fit: cover;
   border-radius: 10px;
 }
 
@@ -176,7 +175,7 @@
     grid-template-columns: 56px 1fr;
   }
 
-  .line img {
+  .productImage {
     width: 56px;
     height: 56px;
   }

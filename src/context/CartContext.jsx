@@ -15,12 +15,18 @@ import {
   normalizeOptions,
   parseStoredCart,
 } from '../utils/cart.js';
+import { categories, products } from '../data/menu.js';
 
 const CartContext = createContext(null);
+const validProductIds = new Set(products.map((product) => product.id));
+const categoryNames = new Map(categories.map((category) => [category.id, category.name]));
 
 const readInitialItems = () => {
   try {
-    return parseStoredCart(window.localStorage.getItem(CART_STORAGE_KEY));
+    return parseStoredCart(
+      window.localStorage.getItem(CART_STORAGE_KEY),
+      validProductIds,
+    );
   } catch {
     return [];
   }
@@ -67,6 +73,7 @@ export function CartProvider({ children }) {
           options: selectedOptions,
           note: cleanNote,
           image: product.image ?? '',
+          categoryName: categoryNames.get(product.categoryId) ?? '',
         },
       ];
     });

@@ -1,11 +1,14 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { categories, formatPrice, products } from '../data/menu.js';
+import { categories, products } from '../data/menu.js';
+import ProductCard from '../components/ProductCard.jsx';
+import { useCart } from '../context/CartContext.jsx';
 import styles from './Menu.module.css';
 
 const isValidCategory = (categoryId) =>
   categories.some((category) => category.id === categoryId);
 
 export default function Menu() {
+  const { addItem } = useCart();
   const [searchParams] = useSearchParams();
   const requestedCategory = searchParams.get('categoria');
   const selectedCategory = isValidCategory(requestedCategory)
@@ -18,6 +21,23 @@ export default function Menu() {
 
   const filterClassName = (categoryId) =>
     categoryId === selectedCategory ? styles.activeFilter : styles.filter;
+
+  const selectedCategoryName = categories.find(
+    (category) => category.id === selectedCategory,
+  )?.name;
+
+  const productGrid = (items) => (
+    <div className="product-grid">
+      {items.map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          categoryName={categories.find((category) => category.id === product.categoryId)?.name}
+          onAdd={addItem}
+        />
+      ))}
+    </div>
+  );
 
   return (
     <section className={styles.page}>
@@ -54,19 +74,25 @@ export default function Menu() {
             Todavía no hay productos cargados en esta categoría.
           </p>
         ) : (
-          <ul className={styles.list}>
-            {visibleProducts.map((product) => (
-              <li className={styles.item} key={product.id}>
-                <div>
-                  <h2 className={styles.itemName}>{product.name}</h2>
-                  <p className={styles.itemDescription}>{product.description}</p>
-                </div>
-                <strong className={styles.itemPrice}>
-                  {formatPrice(product.price)}
-                </strong>
-              </li>
-            ))}
-          </ul>
+          <div className={styles.products}>
+            {selectedCategoryName ? (
+              <h2 className={styles.categoryTitle}>{selectedCategoryName}</h2>
+            ) : null}
+            {selectedCategory === 'papas' ? (
+              ['Salchipapas', 'Choripapas'].map((subcategory) => {
+                const subcategoryProducts = visibleProducts.filter(
+                  (product) => product.subcategory === subcategory,
+                );
+
+                return (
+                  <section className={styles.subcategory} key={subcategory}>
+                    <h3>{subcategory}</h3>
+                    {productGrid(subcategoryProducts)}
+                  </section>
+                );
+              })
+            ) : productGrid(visibleProducts)}
+          </div>
         )}
 
         <p className={styles.note}>

@@ -1,7 +1,7 @@
 // Utilidades puras del carrito: identificadores de línea, precios y validación
 // de lo que se guarda en localStorage. Todos los cálculos son con enteros (COP).
 
-export const CART_STORAGE_KEY = 'burgerzone.cart.v1';
+export const CART_STORAGE_KEY = 'delicias.cart.v1';
 
 const isNonNegativeInteger = (value) => Number.isInteger(value) && value >= 0;
 const isPositiveInteger = (value) => Number.isInteger(value) && value > 0;
@@ -56,7 +56,7 @@ export const calculateCount = (items) =>
 const sanitizeLine = (line) => {
   if (!line || typeof line !== 'object') return null;
 
-  const { productId, name, unitPrice, qty, options, note, image } = line;
+  const { productId, name, unitPrice, qty, options, note, image, categoryName } = line;
 
   if (typeof productId !== 'string' || productId === '') return null;
   if (typeof name !== 'string' || name === '') return null;
@@ -75,13 +75,14 @@ const sanitizeLine = (line) => {
     options: safeOptions,
     note: typeof note === 'string' ? note.trim() : '',
     image: typeof image === 'string' ? image : '',
+    categoryName: typeof categoryName === 'string' ? categoryName : '',
   };
 };
 
 /**
  * Lee el JSON guardado y devuelve un carrito válido (o vacío si algo no encaja).
  */
-export const parseStoredCart = (raw) => {
+export const parseStoredCart = (raw, validProductIds) => {
   if (typeof raw !== 'string' || raw === '') return [];
 
   try {
@@ -93,6 +94,7 @@ export const parseStoredCart = (raw) => {
     parsed.forEach((entry) => {
       const line = sanitizeLine(entry);
       if (!line) return;
+      if (validProductIds instanceof Set && !validProductIds.has(line.productId)) return;
 
       const existing = lines.get(line.lineId);
       lines.set(
