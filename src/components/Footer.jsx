@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 import SocialLinks from './SocialLinks.jsx';
 
@@ -6,20 +7,19 @@ export default function Footer() {
     <footer className={styles.footer} id="contacto">
       <div className={`container ${styles.footerGrid}`}>
         {/* .brand y .brand-icon son globales: los comparte con Navbar */}
-        <a href="#inicio" className="brand">
-          <span className="brand-icon">B</span>
+        <Link to="/" className="brand" aria-label="Delicias al Carbón, inicio">
+          <span className="brand-icon">D</span>
           <span>
-            BURGER
-            <strong>ZONE</strong>
+            Delicias
+            <strong>al Carbón</strong>
           </span>
-        </a>
+        </Link>
 
         <div>
           <h3>Enlaces</h3>
-          <a href="#inicio">Inicio</a>
-          <a href="#menu">Menú</a>
-          <a href="#bebidas">Bebidas</a>
-          <a href="#combos">Combos</a>
+          <Link to="/">Inicio</Link>
+          <Link to="/menu">Menú</Link>
+          <Link to="/menu?categoria=bebidas">Bebidas</Link>
         </div>
 
         <div>
@@ -32,13 +32,13 @@ export default function Footer() {
           <h3>Contacto</h3>
           <p>Neiva, Huila, Colombia</p>
           <p>+57 300 123 4567</p>
-          <p>@burgerzone.com</p>
+          <p>@deliciasalcarbon.com</p>
           <SocialLinks />
         </div>
       </div>
 
       <div className={styles.copyright}>
-        © {new Date().getFullYear()} Burger Zone. Todos los derechos reservados.
+        © {new Date().getFullYear()} Delicias al Carbón. Todos los derechos reservados.
       </div>
     </footer>
   );

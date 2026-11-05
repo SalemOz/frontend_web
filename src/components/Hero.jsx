@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
 
 export default function Hero() {
@@ -17,18 +18,17 @@ export default function Hero() {
         <source src="/videos/hero-burger.mp4" type="video/mp4" />
       </video>
       <div className={styles.heroContent}>
-        {/* .eyebrow es global: lo comparte con Combos */}
-        <span className="eyebrow">COMIDA RÁPIDA QUE SIEMPRE</span>
+        <span className="eyebrow">HECHO AL CARBÓN</span>
         <h1>
-          TE HACE <em>FELIZ</em>
+          Sabor al <em>carbón</em>, sin esperas.
         </h1>
         <p>
-          Hamburguesas jugosas, perros calientes y salchipapas
-          irresistibles. ¡El antojo perfecto en un solo lugar!
+          Hamburguesas, perros, salchipapas, patacolos y platos a la parrilla.
+          Elige, personaliza y pide en menos de un minuto.
         </p>
-        <a href="#menu" className="btn-primary">
+        <Link to="/menu" className="btn-primary">
           EXPLORAR MENÚ <span uk-icon="arrow-right"></span>
-        </a>
+        </Link>
       </div>
 
       <div className={styles.heroBadge}>

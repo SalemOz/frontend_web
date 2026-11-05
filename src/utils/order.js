@@ -1,7 +1,7 @@
 // Pedido de demostración: se genera y se guarda en el navegador.
 // No se envía nada a ningún servidor ni a una pasarela de pago.
 
-export const LAST_ORDER_STORAGE_KEY = 'burgerzone.lastOrder.v1';
+export const LAST_ORDER_STORAGE_KEY = 'delicias.lastOrder.v1';
 
 // Sin caracteres que se confundan al leerlos (0/O, 1/I).
 const ORDER_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -23,7 +23,7 @@ const createOrderNumber = () => {
     (byte) => ORDER_CODE_ALPHABET[byte % ORDER_CODE_ALPHABET.length],
   ).join('');
 
-  return `BZ-${code}`;
+  return `DC-${code}`;
 };
 
 const toText = (value) => (typeof value === 'string' ? value.trim() : '');
