@@ -1,170 +1,157 @@
-// Datos base de Burger Zone.
-// Los precios son enteros en pesos colombianos (COP); nunca se usan decimales.
-// Cualquier dato que falte de la carta real queda marcado con "TODO: carta real".
+// ============================================================
+// Carta real del negocio (transcrita de las 2 caras del menú impreso).
+// Precios en pesos colombianos (COP), enteros.
+// SUPUESTO: los precios del menú impreso están en miles ("$12" = $12.000).
+// TODO: confirmar con el negocio antes de publicar.
+// Fotos: image es null hasta tener fotos reales de cada producto.
+// ============================================================
 
 export const categories = [
-  {
-    id: 'hamburguesas',
-    name: 'Hamburguesas',
-    description: 'Jugosas y con todo el sabor',
-    image:
-      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=85',
-    // Decorativo: la sección actual de categorías lo muestra junto al nombre.
-    icon: '☰',
-  },
-  {
-    id: 'perros',
-    name: 'Perros calientes',
-    description: 'El clásico que nunca falla',
-    image:
-      'https://images.unsplash.com/photo-1768250708131-23da8d1cb5ad?auto=format&fit=crop&w=700&q=85',
-    icon: '↝',
-  },
-  {
-    id: 'salchipapas',
-    name: 'Salchipapas',
-    description: 'Papas, salchicha y mucho más',
-    image:
-      'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=700&q=85',
-    icon: '♨',
-  },
-  {
-    id: 'fritos',
-    name: 'Fritos',
-    description: 'Crujientes y deliciosos',
-    image:
-      'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=85',
-    icon: '✦',
-  },
-  {
-    id: 'combos',
-    name: 'Combos',
-    description: 'Más sabor, más comida y todo lo que te gusta',
-    // TODO: carta real — falta una imagen propia para la categoría Combos.
-    image:
-      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=85',
-    icon: '★',
-  },
-  {
-    id: 'bebidas',
-    name: 'Bebidas',
-    description: 'Refrescantes y llenas de sabor',
-    // TODO: carta real — falta una imagen propia para la categoría Bebidas.
-    image:
-      'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=700&q=85',
-    icon: '✳',
-  },
+  { id: 'hamburguesas', name: 'Hamburguesas', description: 'Jugosas y con todo el sabor', image: null },
+  { id: 'perros', name: 'Perros calientes', description: 'El clásico que nunca falla', image: null },
+  { id: 'papas', name: 'Salchipapas y choripapas', description: 'Papas a la francesa con todo', image: null },
+  { id: 'patacolos', name: 'Patacolos', description: 'Patacón con relleno al gusto', image: null },
+  { id: 'mexicana', name: 'Comida mexicana', description: 'Tacos, burros y flautas', image: null },
+  { id: 'especiales', name: 'Platos especiales', description: 'A la parrilla y al carbón', image: null },
+  { id: 'bebidas', name: 'Bebidas', description: 'Jugos, gaseosas, malteadas y más', image: null },
 ];
 
 export const modifierGroups = [
+  {
+    id: 'pan-o-platano',
+    name: 'Pan o plátano',
+    type: 'single',
+    required: true,
+    options: [
+      { id: 'pan', name: 'En pan', price: 0 },
+      { id: 'platano', name: 'En plátano', price: 0 },
+    ],
+  },
+  {
+    id: 'sabor-jugo',
+    name: 'Sabor',
+    type: 'single',
+    required: true,
+    options: [
+      { id: 'maracuya', name: 'Maracuyá', price: 0 },
+      { id: 'chulupa', name: 'Chulupa', price: 0 },
+      { id: 'mora', name: 'Mora', price: 0 },
+      { id: 'limonada', name: 'Limonada', price: 0 },
+      { id: 'lulo', name: 'Lulo', price: 0 },
+      // TODO: el menú lista también "Batido"; confirmar si es un sabor.
+      { id: 'batido', name: 'Batido', price: 0 },
+    ],
+  },
   {
     id: 'adicionales',
     name: 'Adicionales',
     type: 'multiple',
     required: false,
-    // TODO: carta real — el negocio definirá los adicionales y sus precios.
-    // Estas opciones son solo de prueba para validar el carrito.
     options: [
-      { id: 'adicional-queso', name: 'Queso extra (prueba)', price: 2000 },
-      { id: 'adicional-tocineta', name: 'Tocineta (prueba)', price: 3000 },
-      { id: 'adicional-carne', name: 'Porción de carne (prueba)', price: 4500 },
+      { id: 'porcion-papa', name: 'Porción de papa', price: 4000 },
+      { id: 'porcion-papa-criolla', name: 'Porción de papa criolla', price: 4000 },
     ],
   },
 ];
 
 export const products = [
-  {
-    id: 'producto-1',
-    categoryId: 'hamburguesas',
-    name: 'Hamburguesa Clásica',
-    description: 'Carne de res, queso, lechuga, tomate, cebolla y salsa de la casa',
-    price: 12000,
-    image: categories[0].image,
-    modifierGroupIds: ['adicionales'],
-  },
-  {
-    id: 'producto-2',
-    categoryId: 'salchipapas',
-    name: 'Salchipapa Especial',
-    description: 'Papas fritas, salchicha, queso y salsa de la casa',
-    price: 15000,
-    image: categories[2].image,
-    // TODO: carta real — definir si la salchipapa admite adicionales.
-  },
+  // ---------- Hamburguesas ----------
+  { id: 'hamb-clasica', categoryId: 'hamburguesas', name: 'Hamburguesa Clásica', price: 10000, image: null,
+    description: 'Carne de res, cebolla, tomate, lechuga, queso y salsas de la casa, en pan o plátano.',
+    modifierGroupIds: ['pan-o-platano', 'adicionales'] },
+  { id: 'hamb-tentadora', categoryId: 'hamburguesas', name: 'Hamburguesa Tentadora', price: 15000, image: null,
+    description: 'Carne de res, pollo apanado, cebolla, tomate, lechuga, salsas de la casa y queso.',
+    modifierGroupIds: ['adicionales'] },
+  { id: 'hamb-salvaje', categoryId: 'hamburguesas', name: 'Hamburguesa Salvaje', price: 18000, image: null,
+    description: 'Doble carne, tocineta, maíz tierno, cebolla, tomate, lechuga, queso fundido, salsa de tocineta y salsas de la casa.',
+    modifierGroupIds: ['adicionales'] },
+  { id: 'hamb-master', categoryId: 'hamburguesas', name: 'Hamburguesa Master', price: 18000, image: null,
+    description: 'Carne de res, chorizo, tocineta, huevo frito, maíz tierno, tomate, cebolla, lechuga y queso.',
+    modifierGroupIds: ['adicionales'] },
+  { id: 'hamb-mexicana', categoryId: 'hamburguesas', name: 'Hamburguesa Mexicana', price: 18000, image: null,
+    description: 'Carne de res, tocineta, chorizo, cebolla, tomate, guacamole, jalapeños y queso.',
+    modifierGroupIds: ['adicionales'] },
 
-  // ---------------------------------------------------------------------------
-  // Bebidas: antes eran solo tarjetas informativas en la sección de bebidas.
-  // Ahora son productos normales para que el menú pueda listarlas.
-  // ---------------------------------------------------------------------------
-  {
-    id: 'bebida-jugos-naturales',
-    categoryId: 'bebidas',
-    name: 'Jugos naturales',
-    description: 'Refrescantes y llenos de sabor',
-    // TODO: carta real — precio pendiente.
-    price: 0,
-    image:
-      'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=700&q=85',
-  },
-  {
-    id: 'bebida-gaseosas',
-    categoryId: 'bebidas',
-    name: 'Gaseosas',
-    description: 'Postobon, Coca-Cola, Pepsi y más',
-    // TODO: carta real — precio pendiente.
-    price: 0,
-    image:
-      'https://images.unsplash.com/photo-1544241907-f3f1f5ded15a?auto=format&fit=crop&w=700&q=85',
-  },
-  {
-    id: 'bebida-limonadas',
-    categoryId: 'bebidas',
-    name: 'Limonadas',
-    description: 'Natural, de coco, cerezada y más',
-    // TODO: carta real — precio pendiente.
-    price: 0,
-    image:
-      'https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=700&q=85',
-  },
+  // ---------- Perros calientes ----------
+  { id: 'perro-americano', categoryId: 'perros', name: 'Perro Americano', price: 12000, image: null,
+    description: 'Salchicha, queso, papas ripio, salsas, tocineta, maíz tierno y cebolla grille.',
+    modifierGroupIds: ['adicionales'] },
+  { id: 'perro-super', categoryId: 'perros', name: 'Super Perro', price: 15000, image: null,
+    description: 'Salchicha, carne desmechada, pico de gallo, queso, cebolla, lechuga, papas ripio y salsas de la casa.',
+    modifierGroupIds: ['adicionales'] },
+  { id: 'perro-sencillo', categoryId: 'perros', name: 'Perro Sencillo', price: 7000, image: null,
+    description: 'Salchicha, queso, cebolla grille, papas ripio y salsas de la casa.',
+    modifierGroupIds: ['adicionales'] },
 
-  // ---------------------------------------------------------------------------
-  // Combos: antes vivían en su propio arreglo; ahora son productos con categoría.
-  // ---------------------------------------------------------------------------
-  {
-    id: 'combo-1',
-    categoryId: 'combos',
-    name: 'Combo clásico',
-    description: 'Hamburguesa + papas fritas + gaseosa',
-    price: 16900,
-    image: categories[0].image,
-    // TODO: carta real — definir los adicionales permitidos en cada combo.
-  },
-  {
-    id: 'combo-2',
-    categoryId: 'combos',
-    name: 'Combo salchipapa',
-    description: 'Salchipapa especial + gaseosa',
-    price: 13900,
-    image: categories[2].image,
-  },
-  {
-    id: 'combo-3',
-    categoryId: 'combos',
-    name: 'Combo perro',
-    description: 'Perro americano + papas + gaseosa',
-    price: 14900,
-    image: categories[1].image,
-  },
-  {
-    id: 'combo-4',
-    categoryId: 'combos',
-    name: 'Combo dúo',
-    description: 'Dos hamburguesas + papas para compartir',
-    price: 29900,
-    image: categories[0].image,
-  },
+  // ---------- Salchipapas y choripapas ----------
+  { id: 'salchipapa-sencilla', categoryId: 'papas', subcategory: 'Salchipapas', name: 'Salchipapa Sencilla', price: 10000, image: null,
+    description: 'Papas a la francesa, salchicha, queso, papas ripio y salsas de la casa.' },
+  { id: 'salchipapa-suiza', categoryId: 'papas', subcategory: 'Salchipapas', name: 'Salchipapa Suiza', price: 15000, image: null,
+    description: 'Papas a la francesa, salchicha suiza, queso, tocineta, maíz tierno, lechuga y salsas de la casa.' },
+  { id: 'salchipapa-bandida', categoryId: 'papas', subcategory: 'Salchipapas', name: 'Salchipapa Bandida', price: 28000, image: null,
+    description: 'Papas a la francesa, salchicha clásica, salchicha suiza, cerdo, pechuga, maíz tierno, queso, lechuga picada, cebolla, papas ripio y carne desmechada.' },
+  { id: 'choripapa-clasica', categoryId: 'papas', subcategory: 'Choripapas', name: 'Choripapa Clásica', price: 12000, image: null,
+    description: 'Papas a la francesa, chorizo, tomate, cebolla, lechuga, queso y salsas de la casa.' },
+  { id: 'choripapa-de-la-casa', categoryId: 'papas', subcategory: 'Choripapas', name: 'Choripapa De la Casa', price: 18000, image: null,
+    description: 'Chorizo, butifarra, salchicha suiza, cerdo, pollo, papas a la francesa, maíz tierno, carne desmechada, cebolla y queso.' },
+  { id: 'choripapa-paro-cardiaco', categoryId: 'papas', subcategory: 'Choripapas', name: 'Choripapa Paro Cardíaco', price: 28000, image: null,
+    description: 'Papas a la francesa, pollo, cerdo, carne desmechada, maíz tierno, chorizo, salchicha, butifarra, queso, cebolla grille y papas ripio.' },
 
-  // TODO: carta real — faltan los productos de las categorías "perros" y "fritos".
+  // ---------- Patacolos ----------
+  { id: 'patacolo-pollo-camarones', categoryId: 'patacolos', name: 'Patacolo de Pollo con Camarones', price: 22000, image: null,
+    description: 'Pollo desmechado, camarones, cebolla, queso y maíz tierno.' },
+  { id: 'patacolo-solo-pollo', categoryId: 'patacolos', name: 'Patacolo de Solo Pollo', price: 16000, image: null,
+    description: 'Pollo desmechado, cebolla, queso y maíz tierno.' },
+  { id: 'patacolo-mixto', categoryId: 'patacolos', name: 'Patacolo Mixto', price: 14000, image: null,
+    description: 'Carne desmechada, pollo desmechado, queso, cebolla y maíz tierno.' },
+  { id: 'patacon-con-todo', categoryId: 'patacolos', name: 'Patacón con Todo', price: 25000, image: null,
+    description: 'Pollo y cerdo en cubos, carne desmechada, chorizo, tocineta, maíz tierno, cebolla y queso.' },
+  { id: 'sandwich-pollo', categoryId: 'patacolos', name: 'Sándwich de Pollo', price: 8000, image: null,
+    description: 'Pollo desmechado en salsa de la casa, tomate, lechuga y queso.' },
+  // TODO: en el menú estos dos aparecen bajo la columna de Patacolos pero separados por una línea. Confirmar su categoría.
+  { id: 'mazorca-mixta', categoryId: 'patacolos', name: 'Mazorca Mixta', price: 16000, image: null,
+    description: 'Carne desmechada, pollo y cerdo en trozos bañados en salsa de la casa, maíz desgranado, chorizo, papas a la francesa, papas ripio, lechuga y queso.' },
+  { id: 'ensalada-cesar', categoryId: 'patacolos', name: 'Ensalada César', price: 18000, image: null,
+    description: 'Filetes de pollo a la parrilla, lechuga, tomate, maíz tierno, queso parmesano y aderezos.' },
+
+  // ---------- Comida mexicana ----------
+  { id: 'taco-mixto', categoryId: 'mexicana', name: 'Taco Mixto', price: 15000, image: null, tag: 'Picante',
+    description: 'Carne desmechada, pollo desmechado, salsa picante, cebolla y queso fundido.' },
+  { id: 'burro', categoryId: 'mexicana', name: 'Burro', price: 20000, image: null,
+    description: 'Carne desmechada, pollo desmechado, cebolla, lechuga, pico de gallo, salsa picante, acompañado de papas a la francesa.' },
+  { id: 'flauta', categoryId: 'mexicana', name: 'Flauta', price: 10000, image: null,
+    description: 'Pollo desmechado, jamón, queso y piña melada.' },
+
+  // ---------- Platos especiales ----------
+  { id: 'pechuga-parrilla', categoryId: 'especiales', name: 'Pechuga a la Parrilla', price: 22000, image: null,
+    description: '300 gramos de pechuga acompañada de ensalada, papas a la francesa y salsa de ajo.' },
+  { id: 'papas-locas', categoryId: 'especiales', name: 'Papas Locas', price: 26000, image: null,
+    description: 'Papas margarita acompañadas de carne desmechada, pollo desmechado, chorizo, salchicha, tocineta, queso gratinado y salsas de la casa.' },
+  { id: 'picada-mixta', categoryId: 'especiales', name: 'Picada Mixta', price: 25000, image: null,
+    description: 'Pollo, cerdo, chorizo, papas a la francesa, papa criolla y patacón.' },
+  { id: 'lomo-cerdo', categoryId: 'especiales', name: 'Lomo de Cerdo', price: 25000, image: null,
+    description: 'Acompañado de papas a la francesa, papas criollas y ensalada.' },
+  { id: 'costillas-bbq', categoryId: 'especiales', name: 'Costillas a la BBQ', price: 25000, image: null,
+    description: 'Acompañadas de papas a la francesa, papas criollas y ensalada.' },
+
+  // ---------- Bebidas ----------
+  { id: 'gaseosa-cocacola-15', categoryId: 'bebidas', name: 'Gaseosa Coca-Cola 1.5 L', price: 8000, image: null, description: 'Botella de 1.5 litros.' },
+  { id: 'gaseosa-postobon-15', categoryId: 'bebidas', name: 'Gaseosa Postobón 1.5 L', price: 7000, image: null, description: 'Botella de 1.5 litros.' },
+  { id: 'gaseosa-3l', categoryId: 'bebidas', name: 'Gaseosa 3 litros', price: 10000, image: null, description: 'Botella de 3 litros.' },
+  { id: 'agua-botella', categoryId: 'bebidas', name: 'Agua en botella', price: 2000, image: null, description: 'Agua en botella.' },
+  { id: 'hit-litro', categoryId: 'bebidas', name: 'Hit litro', price: 6000, image: null, description: 'Jugo Hit de 1 litro.' },
+  { id: 'hit-personal', categoryId: 'bebidas', name: 'Hit personal', price: 3500, image: null, description: 'Jugo Hit personal.' },
+  { id: 'jugo-agua-vaso', categoryId: 'bebidas', name: 'Jugo natural en agua (vaso)', price: 5000, image: null,
+    description: 'Jugo natural preparado en agua.', modifierGroupIds: ['sabor-jugo'] },
+  { id: 'jugo-leche-vaso', categoryId: 'bebidas', name: 'Jugo natural en leche (vaso)', price: 6000, image: null,
+    description: 'Jugo natural preparado en leche.', modifierGroupIds: ['sabor-jugo'] },
+  { id: 'jugo-jarra', categoryId: 'bebidas', name: 'Jugo natural en jarra', price: 12000, image: null,
+    description: 'Jugo natural en jarra para compartir.', modifierGroupIds: ['sabor-jugo'] },
+  { id: 'limonada-cerezada', categoryId: 'bebidas', name: 'Limonada cerezada', price: 6000, image: null, description: 'Limonada con cereza.' },
+  { id: 'malteada', categoryId: 'bebidas', name: 'Malteada', price: 8000, image: null, description: 'Malteada.' }, // TODO: confirmar sabores
+  { id: 'copa-frutas-helado', categoryId: 'bebidas', name: 'Copa de frutas con helado', price: 12000, image: null, description: 'Copa de frutas con helado.' },
+  { id: 'michelada', categoryId: 'bebidas', name: 'Michelada', price: 5000, image: null, description: 'Michelada.', ageRestricted: true },
+  { id: 'cerveza-aguila', categoryId: 'bebidas', name: 'Cerveza Águila', price: 4000, image: null, description: 'Cerveza Águila.', ageRestricted: true },
 ];
 
 export const formatPrice = (price) =>

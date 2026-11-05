@@ -1,7 +1,6 @@
 import Hero from '../components/Hero.jsx';
 import Categories from '../components/Categories.jsx';
-import Drinks from '../components/Drinks.jsx';
-import Combos from '../components/Combos.jsx';
+import Favorites from '../components/Favorites.jsx';
 import { useCart } from '../context/CartContext.jsx';
 
 export default function Home() {
@@ -11,8 +10,7 @@ export default function Home() {
     <>
       <Hero />
       <Categories />
-      <Drinks />
-      <Combos onAdd={addItem} />
+      <Favorites onAdd={addItem} />
     </>
   );
 }

@@ -2,12 +2,7 @@ import { Link } from 'react-router-dom';
 import SectionHeading from './SectionHeading.jsx';
 import styles from './Categories.module.css';
 import { categories } from '../data/menu.js';
-
-// Solo estas categorías se destacan en el inicio; el resto vive en /menu.
-const featuredCategoryIds = ['hamburguesas', 'perros', 'salchipapas', 'fritos'];
-const featuredCategories = categories.filter((category) =>
-  featuredCategoryIds.includes(category.id),
-);
+import ProductImage from './ProductImage.jsx';
 
 export default function Categories() {
   return (
@@ -19,15 +14,19 @@ export default function Categories() {
         />
 
         <div className={styles.categoryGrid}>
-          {featuredCategories.map((category) => (
+          {categories.map((category) => (
             <Link
               className={styles.categoryCard}
               to={`/menu?categoria=${category.id}`}
               key={category.id}
             >
-              <img src={category.image} alt={category.name} />
+              <ProductImage
+                image={category.image}
+                alt={category.name}
+                label={category.name}
+                className={styles.categoryImage}
+              />
               <div className={styles.categoryInfo}>
-                <span className={styles.categoryIcon}>{category.icon}</span>
                 <div>
                   <h3>{category.name}</h3>
                   <p>{category.description}</p>
