@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import SectionHeading from './SectionHeading.jsx';
 import styles from './Categories.module.css';
 import { categories } from '../data/menu.js';
@@ -19,10 +20,10 @@ export default function Categories() {
 
         <div className={styles.categoryGrid}>
           {featuredCategories.map((category) => (
-            <a
+            <Link
               className={styles.categoryCard}
-              href="#combos"
-              key={category.name}
+              to={`/menu?categoria=${category.id}`}
+              key={category.id}
             >
               <img src={category.image} alt={category.name} />
               <div className={styles.categoryInfo}>
@@ -33,7 +34,7 @@ export default function Categories() {
                 </div>
                 <span className={styles.roundArrow}>↗</span>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
