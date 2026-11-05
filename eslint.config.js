@@ -18,4 +18,14 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  {
+    // El carrito expone su provider y su hook desde el mismo módulo a propósito.
+    files: ['src/context/CartContext.jsx'],
+    rules: {
+      'react-refresh/only-export-components': [
+        'error',
+        { allowExportNames: ['useCart'] },
+      ],
+    },
+  },
 ])
