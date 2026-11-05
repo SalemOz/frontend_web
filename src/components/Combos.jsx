@@ -1,6 +1,8 @@
 import ProductCard from './ProductCard.jsx';
 import styles from './Combos.module.css';
-import { combos } from '../data/menu.js';
+import { products } from '../data/menu.js';
+
+const comboProducts = products.filter((product) => product.categoryId === 'combos');
 
 export default function Combos({ onAdd }) {
   return (
@@ -19,7 +21,7 @@ export default function Combos({ onAdd }) {
 
         {/* .product-grid es global: lo comparte con Favoritos */}
         <div className="product-grid">
-          {combos.map((combo) => (
+          {comboProducts.map((combo) => (
             <ProductCard
               key={combo.id}
               product={combo}

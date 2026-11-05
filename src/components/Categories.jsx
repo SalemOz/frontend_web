@@ -2,6 +2,12 @@ import SectionHeading from './SectionHeading.jsx';
 import styles from './Categories.module.css';
 import { categories } from '../data/menu.js';
 
+// Solo estas categorías se destacan en el inicio; el resto vive en /menu.
+const featuredCategoryIds = ['hamburguesas', 'perros', 'salchipapas', 'fritos'];
+const featuredCategories = categories.filter((category) =>
+  featuredCategoryIds.includes(category.id),
+);
+
 export default function Categories() {
   return (
     <section className={styles.categoriesSection} id="menu">
@@ -12,7 +18,7 @@ export default function Categories() {
         />
 
         <div className={styles.categoryGrid}>
-          {categories.map((category) => (
+          {featuredCategories.map((category) => (
             <a
               className={styles.categoryCard}
               href="#combos"

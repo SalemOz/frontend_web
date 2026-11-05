@@ -1,6 +1,8 @@
 import SectionHeading from './SectionHeading.jsx';
 import styles from './Drinks.module.css';
-import { drinks } from '../data/menu.js';
+import { products } from '../data/menu.js';
+
+const drinkProducts = products.filter((product) => product.categoryId === 'bebidas');
 
 export default function Drinks() {
   return (
@@ -12,8 +14,8 @@ export default function Drinks() {
           light
         />
         <div className={styles.drinksGrid}>
-          {drinks.map((drink) => (
-            <article className={styles.drinkCard} key={drink.name}>
+          {drinkProducts.map((drink) => (
+            <article className={styles.drinkCard} key={drink.id}>
               <img src={drink.image} alt={drink.name} />
               <div className={styles.drinkInfo}>
                 <span className={styles.drinkIcon}>✳</span>
