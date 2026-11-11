@@ -12,7 +12,7 @@ export const categories = [
   { id: 'patacolos', name: 'Patacolos', description: 'Patacón con relleno al gusto', image: null },
   { id: 'mexicana', name: 'Comida mexicana', description: 'Tacos, burros y flautas', image: null },
   { id: 'especiales', name: 'Platos especiales', description: 'A la parrilla y al carbón', image: null },
-  { id: 'bebidas', name: 'Bebidas', description: 'Jugos, gaseosas, malteadas y más', image: null },
+  { id: 'bebidas', name: 'Bebidas', description: 'Jugos, gaseosas y más', image: null },
 ];
 
 export const modifierGroups = [
