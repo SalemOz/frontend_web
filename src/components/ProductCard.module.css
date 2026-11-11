@@ -54,6 +54,11 @@
 }
 
 /* .btn-primary vive en styles/global.css porque también lo usa Hero */
+.addButton.added,
+.addButton.added:hover {
+  background: var(--cream);
+}
+
 .addButton {
   width: 100%;
   min-height: 37px;
