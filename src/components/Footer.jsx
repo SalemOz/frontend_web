@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 import SocialLinks from './SocialLinks.jsx';
+import { business } from '../data/business.js';
 
 export default function Footer() {
   return (
@@ -24,21 +25,21 @@ export default function Footer() {
 
         <div>
           <h3>Horario</h3>
-          <p>Lunes a domingo</p>
-          <p>Horario por confirmar</p>
+          <p>{business.days}</p>
+          <p>{business.hours.label}</p>
         </div>
 
         <div>
           <h3>Contacto</h3>
-          <p>Neiva, Huila, Colombia</p>
-          <p>+57 300 123 4567</p>
+          <p>{business.address}</p>
+          <a href={`tel:${business.phone.tel}`}>{business.phone.display}</a>
           <p>@deliciasalcarbon.com</p>
           <SocialLinks />
         </div>
       </div>
 
       <div className={styles.copyright}>
-        © {new Date().getFullYear()} Delicias al Carbón. Todos los derechos reservados.
+        © {new Date().getFullYear()} {business.name}. Todos los derechos reservados.
       </div>
     </footer>
   );
