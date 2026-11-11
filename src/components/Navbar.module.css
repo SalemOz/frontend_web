@@ -30,10 +30,6 @@
   color: var(--orange);
 }
 
-.cartDropdown {
-  position: relative;
-}
-
 .cartLink {
   position: relative;
   padding: 8px;

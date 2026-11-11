@@ -1,73 +1,44 @@
-import { useRef } from 'react';
-import CartPanel from './CartPanel.jsx';
+import { Link, NavLink } from 'react-router-dom';
+import { useCart } from '../context/CartContext.jsx';
 import styles from './Navbar.module.css';
 
-export default function Navbar({
-  cart,
-  cartCount,
-  isCartOpen,
-  onToggleCart,
-  onIncrease,
-  onDecrease,
-  onRemove,
-  onClear,
-  onPay,
-  payment,
-  onClose,
-}) {
-  const cartButtonRef = useRef(null);
+const linkClassName = ({ isActive }) => (isActive ? styles.active : undefined);
 
-  const closeCart = () => {
-    onClose();
-    cartButtonRef.current?.focus();
-  };
-
+export default function Navbar() {
+  const { count } = useCart();
   return (
-    <nav className={styles.navbar}>
-      {/* .brand y .brand-icon son globales: los comparte con Footer */}
-      <a href="#inicio" className="brand" aria-label="Burger Zone, inicio">
-        <span className="brand-icon">B</span>
+    <nav className={styles.navbar} aria-label="Navegación principal">
+      {/* .brand es global: lo comparte con Footer */}
+      <Link to="/" className="brand" aria-label="Delicias al Carbón, inicio">
+        <img src="/brand/logo-delicias-192.png" alt="" width="44" height="44" />
         <span>
-          Burger
-          <strong>Zone</strong>
+          Delicias
+          <strong>al Carbón</strong>
         </span>
-      </a>
+      </Link>
 
       <div className={styles.navLinks}>
-        <a className={styles.active} href="#inicio">Inicio</a>
-        <a href="#menu">Menú</a>
-        <a href="#bebidas">Bebidas</a>
-        <a href="#combos">Combos</a>
+        <NavLink to="/" end className={linkClassName}>
+          Inicio
+        </NavLink>
+        <NavLink
+          to="/menu"
+          end
+          className={linkClassName}
+        >
+          Menú
+        </NavLink>
         <a href="#contacto">Contacto</a>
       </div>
 
-      <div className={styles.cartDropdown}>
-        <button
-          ref={cartButtonRef}
-          type="button"
-          className={styles.cartLink}
-          aria-label="Carrito de compras"
-          aria-expanded={isCartOpen}
-          aria-controls="carrito-panel"
-          onClick={onToggleCart}
-        >
-          <span uk-icon="icon: cart; ratio: 1.3"></span>
-          <span className={styles.cartCount} aria-live="polite">{cartCount}</span>
-        </button>
-
-        {isCartOpen && (
-          <CartPanel
-            items={cart}
-            onIncrease={onIncrease}
-            onDecrease={onDecrease}
-            onRemove={onRemove}
-            onClear={onClear}
-            onPay={onPay}
-            payment={payment}
-            onClose={closeCart}
-          />
-        )}
-      </div>
+      <Link
+        to="/carrito"
+        className={styles.cartLink}
+        aria-label="Ir al carrito de compras"
+      >
+        <span uk-icon="icon: cart; ratio: 1.3" aria-hidden="true"></span>
+        <span className={styles.cartCount} aria-live="polite">{count}</span>
+      </Link>
     </nav>
   );
 }

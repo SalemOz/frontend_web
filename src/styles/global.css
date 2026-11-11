@@ -111,18 +111,6 @@ button:focus-visible {
   font-style: italic;
 }
 
-.brand-icon {
-  display: grid;
-  place-items: center;
-  width: 43px;
-  height: 43px;
-  border: 2px solid var(--orange);
-  border-radius: 50%;
-  color: var(--orange);
-  font-size: 26px;
-  font-weight: 900;
-}
-
 /* ---------- Responsive de las compartidas ---------- */
 
 @media (max-width: 900px) {
@@ -140,10 +128,6 @@ button:focus-visible {
     font-size: 20px;
   }
 
-  .brand-icon {
-    width: 36px;
-    height: 36px;
-  }
 }
 
 /* ---------- Accesibilidad ---------- */

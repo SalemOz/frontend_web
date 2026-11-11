@@ -4,7 +4,7 @@
 }
 
 /* La rejilla .product-grid vive en styles/global.css porque la
-   comparte con la sección de combos. */
+   comparte con la página de Menú. */
 
 @media (max-width: 600px) {
   .favoritesSection {
