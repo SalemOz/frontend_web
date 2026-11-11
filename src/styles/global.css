@@ -18,6 +18,8 @@
   --orange: #ff891e;
   --cream: #f6f0e5;
   --muted: #bcb8b1;
+  /* Navbar.jsx lo reemplaza por el alto medido. */
+  --navbar-height: 70px;
 }
 
 * {
@@ -26,7 +28,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 85px;
+  scroll-padding-top: calc(var(--navbar-height) + 15px);
 }
 
 body {
@@ -131,6 +133,15 @@ button:focus-visible {
 }
 
 /* ---------- Accesibilidad ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {

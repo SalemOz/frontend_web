@@ -1,0 +1,42 @@
+/* sticky y no fixed: va al final de la página de Menú, ocupa su propio
+   espacio y se detiene antes del Footer, así nunca tapa contenido. */
+.miniCart {
+  position: sticky;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: fit-content;
+  min-width: 340px;
+  margin: 30px auto 0;
+  padding: 8px 8px 8px 22px;
+  border: 1px solid var(--orange);
+  border-radius: 40px;
+  background: #1b1713;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+}
+
+.summary {
+  margin: 0;
+  color: var(--cream);
+  font-size: 14px;
+}
+
+.summary strong {
+  color: var(--orange);
+  font-size: 16px;
+}
+
+.link {
+  min-height: 44px;
+}
+
+@media (max-width: 600px) {
+  .miniCart {
+    width: 90%;
+    min-width: 0;
+    padding-left: 18px;
+  }
+}

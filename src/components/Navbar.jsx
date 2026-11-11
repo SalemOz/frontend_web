@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import styles from './Navbar.module.css';
@@ -6,8 +7,22 @@ const linkClassName = ({ isActive }) => (isActive ? styles.active : undefined);
 
 export default function Navbar() {
   const { count } = useCart();
+  const navRef = useRef(null);
+
+  // Publica el alto real del navbar (en móvil ocupa dos filas) para lo que se pega debajo.
+  useEffect(() => {
+    const nav = navRef.current;
+    const publishHeight = () => {
+      document.documentElement.style.setProperty('--navbar-height', `${nav.offsetHeight}px`);
+    };
+    publishHeight();
+    const observer = new ResizeObserver(publishHeight);
+    observer.observe(nav);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <nav className={styles.navbar} aria-label="Navegación principal">
+    <nav ref={navRef} className={styles.navbar} aria-label="Navegación principal">
       {/* .brand es global: lo comparte con Footer */}
       <Link to="/" className="brand" aria-label="Delicias al Carbón, inicio">
         <img src="/brand/logo-delicias-192.png" alt="" width="44" height="44" />
