@@ -56,15 +56,19 @@ const normalizeItem = (item) => {
  * Construye el objeto del pedido a partir de las líneas del carrito.
  * @param {Array} items líneas del carrito
  * @param {object} customer datos de entrega (opcionales por ahora)
+ * @param {number} deliveryFee costo del domicilio en COP (0 si se recoge en el local)
  */
-export const createOrder = (items, customer = {}) => {
+export const createOrder = (items, customer = {}, deliveryFee = 0) => {
   const orderItems = Array.isArray(items) ? items.map(normalizeItem) : [];
+  const subtotal = orderItems.reduce((sum, item) => sum + item.lineTotal, 0);
 
   return {
     id: createOrderNumber(),
     createdAt: new Date().toISOString(),
     items: orderItems,
-    subtotal: orderItems.reduce((sum, item) => sum + item.lineTotal, 0),
+    subtotal,
+    deliveryFee,
+    total: subtotal + deliveryFee,
     count: orderItems.reduce((sum, item) => sum + item.qty, 0),
     customer: normalizeCustomer(customer),
   };

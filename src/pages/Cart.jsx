@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import { formatPrice } from '../data/menu.js';
+import { business } from '../data/business.js';
 import ProductImage from '../components/ProductImage.jsx';
 import { createOrder, saveLastOrder } from '../utils/order.js';
 import styles from './Cart.module.css';
 
 export default function Cart() {
-  const { items, subtotal, increase, decrease, remove, clear } = useCart();
+  const { items, count, subtotal, increase, decrease, remove, clear } = useCart();
   const navigate = useNavigate();
   const [deliveryType, setDeliveryType] = useState('domicilio');
   const [paymentMethod, setPaymentMethod] = useState('efectivo');
@@ -18,8 +19,11 @@ export default function Cart() {
     notes: '',
   });
 
+  const deliveryFee = deliveryType === 'domicilio' ? business.deliveryFee : 0;
+  const total = subtotal + deliveryFee;
+
   const handleCheckout = () => {
-    const order = createOrder(items, customer);
+    const order = createOrder(items, customer, deliveryFee);
     if (!saveLastOrder(order)) return;
 
     clear();
@@ -53,7 +57,7 @@ export default function Cart() {
             <div>
               <div className={styles.listHeader}>
                 <h2>Tu selección</h2>
-                <span>{items.length} {items.length === 1 ? 'producto' : 'productos'}</span>
+                <span>{count} {count === 1 ? 'producto' : 'productos'}</span>
               </div>
             <ul className={styles.list}>
               {items.map((line) => (
@@ -175,7 +179,7 @@ export default function Cart() {
               <h2>Tu pedido</h2>
               <div className={styles.summaryRow}>
                 <span>Productos</span>
-                <strong>{items.length}</strong>
+                <strong>{count}</strong>
               </div>
               <div className={styles.summaryRow}>
                 <span>Subtotal</span>
@@ -183,11 +187,11 @@ export default function Cart() {
               </div>
               <div className={styles.summaryRow}>
                 <span>Domicilio</span>
-                <strong>Por confirmar</strong>
+                <strong>{deliveryFee > 0 ? formatPrice(deliveryFee) : 'No aplica'}</strong>
               </div>
               <div className={`${styles.summaryRow} ${styles.total}`}>
                 <span>Total</span>
-                <strong>{formatPrice(subtotal)}</strong>
+                <strong>{formatPrice(total)}</strong>
               </div>
               <button
                 type="button"

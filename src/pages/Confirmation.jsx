@@ -48,7 +48,7 @@ export default function Confirmation() {
           </div>
           <div className={styles.summaryRow}>
             <dt>Total</dt>
-            <dd className={styles.total}>{formatPrice(order.subtotal)}</dd>
+            <dd className={styles.total}>{formatPrice(order.total ?? order.subtotal)}</dd>
           </div>
         </dl>
 
