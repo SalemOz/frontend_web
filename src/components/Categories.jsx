@@ -9,7 +9,6 @@ export default function Categories() {
     <section className={styles.categoriesSection} id="menu">
       <div className="container">
         <SectionHeading
-          eyebrow="NUESTRAS CATEGORÍAS"
           title="¿Qué se te antoja hoy?"
         />
 
