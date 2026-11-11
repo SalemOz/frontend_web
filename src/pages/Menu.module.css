@@ -1,4 +1,6 @@
 .page {
+  /* Alto de la barra de pestañas: 44 px de pestaña + 8 px arriba y abajo + borde. */
+  --tabs-height: 61px;
   padding: 56px 0 90px;
 }
 
@@ -12,53 +14,162 @@
 
 .intro {
   max-width: 60ch;
-  margin: 0 0 26px;
+  margin: 0 0 22px;
   color: var(--muted);
   font-size: 15px;
 }
 
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 28px;
+/* ---------- Búsqueda ---------- */
+
+.search {
+  position: relative;
+  max-width: 460px;
+  margin-bottom: 18px;
 }
 
-.filter,
-.activeFilter {
+.search input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 48px 10px 18px;
+  border: 1px solid #333;
+  border-radius: 30px;
+  background: var(--card);
+  color: var(--cream);
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.search input::placeholder {
+  color: var(--muted);
+}
+
+.search input:focus-visible {
+  border-color: var(--orange);
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+}
+
+/* El botón propio reemplaza la "x" nativa de WebKit. */
+.search input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.clearSearch {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.clearSearch:hover {
+  color: var(--orange);
+}
+
+.searchStatus {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.searchStatus:empty {
+  display: none;
+}
+
+/* ---------- Pestañas de categoría ---------- */
+
+.tabsBar {
+  position: sticky;
+  top: var(--navbar-height);
+  z-index: 50;
+  min-height: var(--tabs-height);
+  border-bottom: 1px solid #292929;
+  background: var(--black);
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  /* El relleno deja sitio al contorno de foco, que overflow recortaría. */
+  padding: 8px 6px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab,
+.activeTab {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
-  min-height: 36px;
-  padding: 8px 16px;
+  min-height: 44px;
+  padding: 8px 18px;
   border: 1px solid #333;
   border-radius: 30px;
   color: var(--muted);
   font-size: 13px;
+  white-space: nowrap;
   transition: border-color 0.2s, color 0.2s;
 }
 
-.filter:hover {
+.tab:hover {
   border-color: var(--orange);
   color: var(--cream);
 }
 
-.activeFilter {
+.activeTab {
   border-color: var(--orange);
   background: var(--orange);
   color: #17110a;
   font-weight: 800;
 }
 
-.products {
+/* ---------- Secciones ---------- */
+
+.content {
   display: grid;
-  gap: 30px;
+  justify-items: start;
+  gap: 34px;
+  padding-top: 26px;
 }
 
-.categoryTitle,
+.category {
+  display: grid;
+  gap: 18px;
+  width: 100%;
+  /* Se suma al scroll-padding-top global, que ya descuenta el navbar. */
+  scroll-margin-top: var(--tabs-height);
+}
+
+.categoryHeader h2,
 .subcategory h3 {
   margin: 0;
   color: var(--cream);
-  font-size: 24px;
+}
+
+.categoryHeader h2 {
+  font-size: 26px;
+}
+
+.categoryHeader p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 .subcategory {
@@ -66,21 +177,12 @@
   gap: 14px;
 }
 
-
-.empty {
-  padding: 22px 0;
-  color: var(--muted);
-}
-
-.note {
-  margin-top: 28px;
-  color: var(--muted);
-  font-size: 13px;
+.subcategory h3 {
+  font-size: 19px;
 }
 
 @media (max-width: 600px) {
   .page {
     padding: 36px 0 70px;
   }
-
 }
