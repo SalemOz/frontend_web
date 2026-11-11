@@ -8,9 +8,9 @@ export default function Navbar() {
   const { count } = useCart();
   return (
     <nav className={styles.navbar} aria-label="Navegación principal">
-      {/* .brand y .brand-icon son globales: los comparte con Footer */}
+      {/* .brand es global: lo comparte con Footer */}
       <Link to="/" className="brand" aria-label="Delicias al Carbón, inicio">
-        <span className="brand-icon">D</span>
+        <img src="/brand/logo-delicias-192.png" alt="" width="44" height="44" />
         <span>
           Delicias
           <strong>al Carbón</strong>

@@ -7,9 +7,9 @@ export default function Footer() {
   return (
     <footer className={styles.footer} id="contacto">
       <div className={`container ${styles.footerGrid}`}>
-        {/* .brand y .brand-icon son globales: los comparte con Navbar */}
+        {/* .brand es global: lo comparte con Navbar */}
         <Link to="/" className="brand" aria-label="Delicias al Carbón, inicio">
-          <span className="brand-icon">D</span>
+          <img src="/brand/logo-delicias-192.png" alt="" width="96" height="96" />
           <span>
             Delicias
             <strong>al Carbón</strong>
