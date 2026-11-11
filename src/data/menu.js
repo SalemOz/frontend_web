@@ -1,8 +1,7 @@
 // ============================================================
 // Carta real del negocio (transcrita de las 2 caras del menú impreso).
 // Precios en pesos colombianos (COP), enteros.
-// SUPUESTO: los precios del menú impreso están en miles ("$12" = $12.000).
-// TODO: confirmar con el negocio antes de publicar.
+// Precios confirmados: los del menú impreso están en miles ("$12" = $12.000).
 // Fotos: image es null hasta tener fotos reales de cada producto.
 // ============================================================
 
@@ -38,11 +37,11 @@ export const modifierGroups = [
       { id: 'mora', name: 'Mora', price: 0 },
       { id: 'limonada', name: 'Limonada', price: 0 },
       { id: 'lulo', name: 'Lulo', price: 0 },
-      // TODO: el menú lista también "Batido"; confirmar si es un sabor.
       { id: 'batido', name: 'Batido', price: 0 },
     ],
   },
   {
+    // Adicionales habituales del negocio. La lista puede crecer más adelante.
     id: 'adicionales',
     name: 'Adicionales',
     type: 'multiple',
@@ -99,28 +98,35 @@ export const products = [
 
   // ---------- Patacolos ----------
   { id: 'patacolo-pollo-camarones', categoryId: 'patacolos', name: 'Patacolo de Pollo con Camarones', price: 22000, image: null,
-    description: 'Pollo desmechado, camarones, cebolla, queso y maíz tierno.' },
+    description: 'Pollo desmechado, camarones, cebolla, queso y maíz tierno.',
+    modifierGroupIds: ['adicionales'] },
   { id: 'patacolo-solo-pollo', categoryId: 'patacolos', name: 'Patacolo de Solo Pollo', price: 16000, image: null,
-    description: 'Pollo desmechado, cebolla, queso y maíz tierno.' },
+    description: 'Pollo desmechado, cebolla, queso y maíz tierno.',
+    modifierGroupIds: ['adicionales'] },
   { id: 'patacolo-mixto', categoryId: 'patacolos', name: 'Patacolo Mixto', price: 14000, image: null,
-    description: 'Carne desmechada, pollo desmechado, queso, cebolla y maíz tierno.' },
+    description: 'Carne desmechada, pollo desmechado, queso, cebolla y maíz tierno.',
+    modifierGroupIds: ['adicionales'] },
   { id: 'patacon-con-todo', categoryId: 'patacolos', name: 'Patacón con Todo', price: 25000, image: null,
-    description: 'Pollo y cerdo en cubos, carne desmechada, chorizo, tocineta, maíz tierno, cebolla y queso.' },
+    description: 'Pollo y cerdo en cubos, carne desmechada, chorizo, tocineta, maíz tierno, cebolla y queso.',
+    modifierGroupIds: ['adicionales'] },
   { id: 'sandwich-pollo', categoryId: 'patacolos', name: 'Sándwich de Pollo', price: 8000, image: null,
-    description: 'Pollo desmechado en salsa de la casa, tomate, lechuga y queso.' },
-  // TODO: en el menú estos dos aparecen bajo la columna de Patacolos pero separados por una línea. Confirmar su categoría.
-  { id: 'mazorca-mixta', categoryId: 'patacolos', name: 'Mazorca Mixta', price: 16000, image: null,
+    description: 'Pollo desmechado en salsa de la casa, tomate, lechuga y queso.',
+    modifierGroupIds: ['adicionales'] },
+  { id: 'mazorca-mixta', categoryId: 'especiales', name: 'Mazorca Mixta', price: 16000, image: null,
     description: 'Carne desmechada, pollo y cerdo en trozos bañados en salsa de la casa, maíz desgranado, chorizo, papas a la francesa, papas ripio, lechuga y queso.' },
-  { id: 'ensalada-cesar', categoryId: 'patacolos', name: 'Ensalada César', price: 18000, image: null,
-    description: 'Filetes de pollo a la parrilla, lechuga, tomate, maíz tierno, queso parmesano y aderezos.' },
+  { id: 'ensalada-cesar', categoryId: 'especiales', name: 'Ensalada César', price: 18000, image: null,
+    description: 'Filetes de pollo a la parrilla, lechuga, tomate, maíz tierno, queso parmesano y aderezos.',
+    modifierGroupIds: ['adicionales'] },
 
   // ---------- Comida mexicana ----------
   { id: 'taco-mixto', categoryId: 'mexicana', name: 'Taco Mixto', price: 15000, image: null, tag: 'Picante',
-    description: 'Carne desmechada, pollo desmechado, salsa picante, cebolla y queso fundido.' },
+    description: 'Carne desmechada, pollo desmechado, salsa picante, cebolla y queso fundido.',
+    modifierGroupIds: ['adicionales'] },
   { id: 'burro', categoryId: 'mexicana', name: 'Burro', price: 20000, image: null,
     description: 'Carne desmechada, pollo desmechado, cebolla, lechuga, pico de gallo, salsa picante, acompañado de papas a la francesa.' },
   { id: 'flauta', categoryId: 'mexicana', name: 'Flauta', price: 10000, image: null,
-    description: 'Pollo desmechado, jamón, queso y piña melada.' },
+    description: 'Pollo desmechado, jamón, queso y piña melada.',
+    modifierGroupIds: ['adicionales'] },
 
   // ---------- Platos especiales ----------
   { id: 'pechuga-parrilla', categoryId: 'especiales', name: 'Pechuga a la Parrilla', price: 22000, image: null,
@@ -148,7 +154,6 @@ export const products = [
   { id: 'jugo-jarra', categoryId: 'bebidas', name: 'Jugo natural en jarra', price: 12000, image: null,
     description: 'Jugo natural en jarra para compartir.', modifierGroupIds: ['sabor-jugo'] },
   { id: 'limonada-cerezada', categoryId: 'bebidas', name: 'Limonada cerezada', price: 6000, image: null, description: 'Limonada con cereza.' },
-  { id: 'malteada', categoryId: 'bebidas', name: 'Malteada', price: 8000, image: null, description: 'Malteada.' }, // TODO: confirmar sabores
   { id: 'copa-frutas-helado', categoryId: 'bebidas', name: 'Copa de frutas con helado', price: 12000, image: null, description: 'Copa de frutas con helado.' },
   { id: 'michelada', categoryId: 'bebidas', name: 'Michelada', price: 5000, image: null, description: 'Michelada.', ageRestricted: true },
   { id: 'cerveza-aguila', categoryId: 'bebidas', name: 'Cerveza Águila', price: 4000, image: null, description: 'Cerveza Águila.', ageRestricted: true },
