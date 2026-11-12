@@ -11,7 +11,7 @@ export default function Layout() {
 
   // Al cambiar de ruta: scroll arriba y foco en el título de la página.
   // Se usa location.key para cubrir también cambios de query (?categoria=...);
-  // los anclas del mismo documento (#contacto) no crean una nueva location.
+  // los anclas del mismo documento (#seccion) no crean una nueva location.
   useEffect(() => {
     const previous = previousLocation.current;
     if (previous.key === location.key) return;

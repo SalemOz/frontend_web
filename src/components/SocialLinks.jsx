@@ -2,10 +2,10 @@ import Icon from './Icon.jsx';
 import styles from './SocialLinks.module.css';
 
 // Sustituir por los perfiles del negocio cuando estén disponibles.
+// WhatsApp no va aquí: el Footer ya enlaza al chat del local (utils/whatsapp.js).
 const socialLinks = [
   { name: 'Facebook', icon: 'facebook', url: 'https://www.facebook.com/' },
   { name: 'Instagram', icon: 'instagram', url: 'https://www.instagram.com/' },
-  { name: 'WhatsApp', icon: 'whatsapp', url: 'https://www.whatsapp.com/' },
 ];
 
 export default function SocialLinks() {

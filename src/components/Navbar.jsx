@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import Icon from './Icon.jsx';
+import { whatsappContactUrl } from '../utils/whatsapp.js';
 import styles from './Navbar.module.css';
 
 const linkClassName = ({ isActive }) => (isActive ? styles.active : undefined);
@@ -44,7 +45,14 @@ export default function Navbar() {
         >
           Menú
         </NavLink>
-        <a href="#contacto">Contacto</a>
+        <a
+          href={whatsappContactUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Contacto por WhatsApp (se abre en una pestaña nueva)"
+        >
+          Contacto
+        </a>
       </div>
 
       <Link
