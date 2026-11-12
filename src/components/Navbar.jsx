@@ -2,12 +2,16 @@ import { useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import Icon from './Icon.jsx';
+import StatusChip from './StatusChip.jsx';
+import { useBusinessStatus } from '../hooks/useBusinessStatus.js';
+import { whatsappContactUrl } from '../utils/whatsapp.js';
 import styles from './Navbar.module.css';
 
 const linkClassName = ({ isActive }) => (isActive ? styles.active : undefined);
 
 export default function Navbar() {
   const { count } = useCart();
+  const status = useBusinessStatus();
   const navRef = useRef(null);
 
   // Publica el alto real del navbar para lo que se pega debajo (pestañas del menú, resumen).
@@ -44,17 +48,30 @@ export default function Navbar() {
         >
           Menú
         </NavLink>
-        <a href="#contacto">Contacto</a>
+        <a
+          href={whatsappContactUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Contacto por WhatsApp (se abre en una pestaña nueva)"
+        >
+          Contacto
+        </a>
       </div>
 
-      <Link
-        to="/carrito"
-        className={styles.cartLink}
-        aria-label="Ir al carrito de compras"
-      >
-        <Icon name="cart" ratio={1.3} />
-        <span className={styles.cartCount} aria-live="polite">{count}</span>
-      </Link>
+      {/* Escritorio: estado junto al carrito. Hasta 900 px el estado baja a una franja propia. */}
+      <div className={styles.actions}>
+        <div className={styles.statusSlot}>
+          <StatusChip status={status} announce />
+        </div>
+        <Link
+          to="/carrito"
+          className={styles.cartLink}
+          aria-label="Ir al carrito de compras"
+        >
+          <Icon name="cart" ratio={1.3} />
+          <span className={styles.cartCount} aria-live="polite">{count}</span>
+        </Link>
+      </div>
     </nav>
   );
 }

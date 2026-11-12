@@ -110,7 +110,7 @@ export const products = [
   { id: 'patacon-con-todo', categoryId: 'patacolos', name: 'Patacón con Todo', price: 25000, image: null,
     description: 'Pollo y cerdo en cubos, carne desmechada, chorizo, tocineta, maíz tierno, cebolla y queso.',
     modifierGroupIds: ['adicionales'] },
-  { id: 'sandwich-pollo', categoryId: 'patacolos', name: 'Sándwich de Pollo', price: 8000, image: null,
+  { id: 'sandwich-pollo', categoryId: 'especiales', name: 'Sándwich de Pollo', price: 8000, image: null,
     description: 'Pollo desmechado en salsa de la casa, tomate, lechuga y queso.',
     modifierGroupIds: ['adicionales'] },
   { id: 'mazorca-mixta', categoryId: 'especiales', name: 'Mazorca Mixta', price: 16000, image: null,

@@ -28,7 +28,7 @@ export default function Favorites({ addedId, onSelect }) {
           {recommendedProducts.map((product) => (
             <ProductCard
               key={product.id}
-              product={product}
+              product={product}
               isAdded={addedId === product.id}
               onSelect={onSelect}
             />

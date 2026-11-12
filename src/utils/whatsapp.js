@@ -46,3 +46,8 @@ export const buildOrderMessage = (order) => {
 /** Enlace que abre el chat del local con el pedido ya escrito. */
 export const whatsappOrderUrl = (order) =>
   `https://wa.me/${business.phone.whatsapp}?text=${encodeURIComponent(buildOrderMessage(order))}`;
+
+const CONTACT_MESSAGE = `Hola, quiero hacer un pedido en ${business.name}.`;
+
+/** Enlace de contacto general (Navbar, Footer): abre el chat del local con un saludo. */
+export const whatsappContactUrl = `https://wa.me/${business.phone.whatsapp}?text=${encodeURIComponent(CONTACT_MESSAGE)}`;
