@@ -32,7 +32,7 @@
   margin-inline: auto;
   padding: 55px 0;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 .hero h1 {
@@ -47,8 +47,43 @@
 }
 
 .hero h1 em {
+  position: relative;
   color: var(--orange);
   font-style: italic;
+}
+
+/* Palabras del título: inline-block para poder moverlas con transform (GSAP). */
+.word {
+  display: inline-block;
+}
+
+/* Destello de "carbón": una copia encendida encima; solo cambia su opacidad. */
+.glow {
+  position: absolute;
+  inset: 0;
+  color: #ffd27a;
+  text-shadow: 0 0 14px rgba(255, 137, 30, 0.95), 0 0 32px rgba(255, 137, 30, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Brasas (decorativas): encima del degradado (::after) y debajo del texto. */
+.embers {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ember {
+  position: absolute;
+  bottom: -8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c4 0%, #ffc04d 35%, #ff891e 60%, rgba(255, 137, 30, 0) 72%);
+  opacity: 0;
 }
 
 .heroContent p {
