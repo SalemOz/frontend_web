@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import CountUp from '../motion/CountUp.jsx';
+import RollingNumber from '../motion/RollingNumber.jsx';
+import { useCartMotion } from '../motion/useCartMotion.js';
+import { cart as cartMotion } from '../motion/tokens.js';
 import { Link } from 'react-router-dom';
 import { useTransitionNavigate } from '../motion/transitionContext.js';
 import { useCart } from '../context/CartContext.jsx';
@@ -44,6 +48,34 @@ export default function Cart() {
     'aria-disabled': isOpen ? undefined : true,
   };
 
+  // Movimiento (src/motion/useCartMotion.js). errorsVersion dispara la sacudida de errores.
+  const pageRef = useRef(null);
+  const [errorsVersion, setErrorsVersion] = useState(0);
+  const { removeLine, bounceLine } = useCartMotion(pageRef, {
+    isEmpty: items.length === 0,
+    isPickup,
+    isOpen,
+    errorsVersion,
+  });
+  const lineOf = (event) => event.currentTarget.closest('[data-cart-line]');
+
+  const handleIncrease = (event, line) => {
+    increase(line.lineId);
+    bounceLine(lineOf(event));
+  };
+
+  // Con 1 unidad, "−" quita la línea: misma salida animada que "Quitar".
+  const handleDecrease = (event, line) => {
+    if (line.qty === 1) {
+      removeLine(lineOf(event), () => decrease(line.lineId));
+      return;
+    }
+    decrease(line.lineId);
+    bounceLine(lineOf(event));
+  };
+
+  const handleRemove = (event, line) => removeLine(lineOf(event), () => remove(line.lineId));
+
   const updateField = (field) => (event) => {
     setCustomer({ ...customer, [field]: event.target.value });
     if (errors[field]) setErrors({ ...errors, [field]: undefined });
@@ -59,7 +91,7 @@ export default function Cart() {
 
   const fieldError = (field) =>
     errors[field] && (
-      <span id={`checkout-${field}-error`} className={styles.fieldError}>
+      <span id={`checkout-${field}-error`} className={styles.fieldError} data-field-error>
         {errors[field]}
       </span>
     );
@@ -71,6 +103,7 @@ export default function Cart() {
     const firstInvalid = ['name', 'phone', 'address'].find((field) => nextErrors[field]);
     setErrors(nextErrors);
     if (firstInvalid) {
+      setErrorsVersion((version) => version + 1);
       const field = document.getElementById(`checkout-${firstInvalid}`);
       // Centrado para que la barra fija de abajo (móvil) no tape el campo con error.
       field?.focus({ preventScroll: true });
@@ -93,20 +126,20 @@ export default function Cart() {
   };
 
   return (
-    <section className={styles.page}>
+    <section ref={pageRef} className={styles.page}>
       <div className="container">
         <span className="eyebrow">TU PEDIDO</span>
         <h1 className="page-title">Carrito</h1>
 
         {!isOpen && (
-          <p className={styles.closedNotice}>
+          <p className={styles.closedNotice} data-closed-notice>
             <strong>Estamos cerrados.</strong> Abrimos a las {opensAt} Puedes armar tu
             pedido y finalizarlo cuando abramos.
           </p>
         )}
 
         {items.length === 0 ? (
-          <div className={styles.empty}>
+          <div className={styles.empty} data-cart-empty>
             <Icon name="cart" ratio={2} className={styles.emptyIcon} />
             <h2>Tu carrito está esperando algo delicioso</h2>
             <p>Explora la carta y agrega tus favoritos para empezar el pedido.</p>
@@ -124,7 +157,7 @@ export default function Cart() {
               </div>
             <ul className={styles.list}>
               {items.map((line) => (
-                <li className={styles.line} key={line.lineId}>
+                <li className={styles.line} key={line.lineId} data-cart-line>
                   <ProductImage
                     image={line.image}
                     alt=""
@@ -149,15 +182,15 @@ export default function Cart() {
                     <div className={styles.qtyControls}>
                       <button
                         type="button"
-                        onClick={() => decrease(line.lineId)}
+                        onClick={(event) => handleDecrease(event, line)}
                         aria-label={`Quitar uno de ${line.name}`}
                       >
                         −
                       </button>
-                      <span className={styles.qty} aria-live="polite">{line.qty}</span>
+                      <RollingNumber value={line.qty} className={styles.qty} />
                       <button
                         type="button"
-                        onClick={() => increase(line.lineId)}
+                        onClick={(event) => handleIncrease(event, line)}
                         aria-label={`Agregar uno de ${line.name}`}
                       >
                         +
@@ -165,14 +198,15 @@ export default function Cart() {
                       <button
                         type="button"
                         className={styles.remove}
-                        onClick={() => remove(line.lineId)}
+                        onClick={(event) => handleRemove(event, line)}
                       >
                         Quitar
                       </button>
                     </div>
                   </div>
 
-                  <strong className={styles.lineTotal}>
+                  <strong className={styles.lineTotal} data-line-total>
+                    <span className={styles.priceFlash} data-line-flash aria-hidden="true" />
                     {formatPrice(line.unitPrice * line.qty)}
                   </strong>
                 </li>
@@ -246,7 +280,7 @@ export default function Cart() {
               </form>
             </div>
 
-            <aside className={styles.summary} aria-label="Resumen del pedido">
+            <aside className={styles.summary} aria-label="Resumen del pedido" data-cart-summary>
               <span className="eyebrow">RESUMEN</span>
               <h2>Tu pedido</h2>
               <div className={styles.summaryRow}>
@@ -255,15 +289,20 @@ export default function Cart() {
               </div>
               <div className={styles.summaryRow}>
                 <span>Subtotal</span>
-                <strong>{formatPrice(subtotal)}</strong>
+                <strong>
+                  <CountUp value={subtotal} format={formatPrice} duration={cartMotion.totalCount} />
+                </strong>
               </div>
-              <div className={styles.summaryRow}>
+              {/* Al elegir "Recoger en el local" el renglón se colapsa (useCartMotion). */}
+              <div className={styles.summaryRow} data-delivery-row>
                 <span>Domicilio</span>
-                <strong>{deliveryFee > 0 ? formatPrice(deliveryFee) : 'No aplica'}</strong>
+                <strong>{formatPrice(business.deliveryFee)}</strong>
               </div>
               <div className={`${styles.summaryRow} ${styles.total}`}>
                 <span>Total</span>
-                <strong>{formatPrice(total)}</strong>
+                <strong>
+                  <CountUp value={total} format={formatPrice} duration={cartMotion.totalCount} />
+                </strong>
               </div>
               <button {...checkoutProps} className={`btn-primary ${styles.checkout}`}>
                 {checkoutLabel} {isOpen && <Icon name="arrow-right" />}
@@ -300,7 +339,10 @@ export default function Cart() {
             {/* Solo en pantallas angostas: total y envío siempre a mano del pulgar. */}
             <div className={styles.mobileBar}>
               <p>
-                Total <strong>{formatPrice(total)}</strong>
+                Total{' '}
+                <strong>
+                  <CountUp value={total} format={formatPrice} duration={cartMotion.totalCount} />
+                </strong>
               </p>
               <button {...checkoutProps} className="btn-primary">
                 {checkoutLabel} {isOpen && <Icon name="arrow-right" />}
