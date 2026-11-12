@@ -19,13 +19,19 @@
   line-height: 1.4;
 }
 
-.footerGrid p,
-.footerGrid > div > a {
-  display: block;
+.footerGrid p {
   margin: 7px 0;
   color: #c8c4be;
   font-size: 12px;
   line-height: 1.5;
+}
+
+.footerGrid > div > a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: #c8c4be;
+  font-size: 12px;
 }
 
 .footerGrid > div > a:hover {

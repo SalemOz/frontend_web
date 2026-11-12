@@ -18,6 +18,8 @@
   --orange: #ff891e;
   --cream: #f6f0e5;
   --muted: #bcb8b1;
+  /* Borde de campos de texto: 3,6:1 sobre --card (WCAG 1.4.11 pide 3:1). */
+  --border-control: #7a6f63;
   /* Navbar.jsx lo reemplaza por el alto medido. */
   --navbar-height: 70px;
 }
@@ -141,11 +143,20 @@ button {
   font: inherit;
 }
 
-a:focus-visible,
-button:focus-visible {
+/* Todo lo enfocable con teclado (también radios y casillas del carrito). */
+:focus-visible {
   outline: 3px solid var(--orange);
   outline-offset: 3px;
+}
+
+a:focus-visible,
+button:focus-visible {
   border-radius: 4px;
+}
+
+/* Títulos y <main> reciben foco por código al cambiar de página: sin anillo. */
+[tabindex="-1"]:focus-visible {
+  outline: none;
 }
 
 /* ---------- Compartidas por varios componentes ---------- */

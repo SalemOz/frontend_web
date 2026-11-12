@@ -209,7 +209,7 @@
   width: 100%;
   min-height: 46px;
   padding: 10px 14px;
-  border: 1px solid #333;
+  border: 1px solid var(--border-control);
   border-radius: 10px;
   background: var(--black);
   color: var(--cream);
