@@ -10,7 +10,7 @@ export default function Navbar() {
   const { count } = useCart();
   const navRef = useRef(null);
 
-  // Publica el alto real del navbar (en móvil ocupa dos filas) para lo que se pega debajo.
+  // Publica el alto real del navbar para lo que se pega debajo (pestañas del menú, resumen).
   useEffect(() => {
     const nav = navRef.current;
     const publishHeight = () => {

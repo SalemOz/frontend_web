@@ -236,10 +236,13 @@ button:focus-visible {
   transition: background 0.2s, transform 0.2s;
 }
 
-.btn-primary:hover {
-  background: #ffab50;
-  color: var(--on-orange);
-  transform: translateY(-2px);
+/* Solo con mouse: en pantallas táctiles el hover se queda "pegado" tras tocar. */
+@media (hover: hover) {
+  .btn-primary:hover {
+    background: #ffab50;
+    color: var(--on-orange);
+    transform: translateY(-2px);
+  }
 }
 
 .product-grid {
@@ -270,6 +273,13 @@ button:focus-visible {
 @media (max-width: 900px) {
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 

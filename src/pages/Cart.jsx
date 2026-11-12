@@ -57,7 +57,10 @@ export default function Cart() {
     const firstInvalid = ['name', 'phone', 'address'].find((field) => nextErrors[field]);
     setErrors(nextErrors);
     if (firstInvalid) {
-      document.getElementById(`checkout-${firstInvalid}`)?.focus();
+      const field = document.getElementById(`checkout-${firstInvalid}`);
+      // Centrado para que la barra fija de abajo (móvil) no tape el campo con error.
+      field?.focus({ preventScroll: true });
+      field?.scrollIntoView({ block: 'center' });
       return;
     }
 
@@ -104,7 +107,6 @@ export default function Cart() {
                   <ProductImage
                     image={line.image}
                     alt=""
-                    label={line.categoryName}
                     className={styles.productImage}
                   />
 
@@ -276,6 +278,16 @@ export default function Cart() {
                 </button>
               )}
             </aside>
+            </div>
+
+            {/* Solo en pantallas angostas: total y envío siempre a mano del pulgar. */}
+            <div className={styles.mobileBar}>
+              <p>
+                Total <strong>{formatPrice(total)}</strong>
+              </p>
+              <button type="submit" form="checkout-form" className="btn-primary">
+                Revisar y enviar <Icon name="arrow-right" />
+              </button>
             </div>
           </>
         )}

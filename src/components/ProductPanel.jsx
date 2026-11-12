@@ -22,7 +22,7 @@ const initialSelection = (groups) =>
  * Contenido del panel. Se monta con key={product.id}, así cada apertura
  * parte limpia: cantidad 1, sin nota y con los valores por defecto.
  */
-function PanelContent({ product, categoryName, onAdd, onRequestClose }) {
+function PanelContent({ product, onAdd, onRequestClose }) {
   const groups = getProductGroups(product);
   const [selection, setSelection] = useState(() => initialSelection(groups));
   const [note, setNote] = useState('');
@@ -78,7 +78,6 @@ function PanelContent({ product, categoryName, onAdd, onRequestClose }) {
           <ProductImage
             image={product.image}
             alt=""
-            label={categoryName}
             className={styles.image}
           />
         </div>
@@ -179,7 +178,7 @@ function PanelContent({ product, categoryName, onAdd, onRequestClose }) {
  * Quien lo usa decide qué producto se muestra (product o null) y qué pasa al
  * cerrar (onClose); aquí vive el <dialog> y su cierre.
  */
-export default function ProductPanel({ product, categoryName, onAdd, onClose }) {
+export default function ProductPanel({ product, onAdd, onClose }) {
   const dialogRef = useRef(null);
   const lastProductId = useRef(null);
 
@@ -230,7 +229,6 @@ export default function ProductPanel({ product, categoryName, onAdd, onClose }) 
         <PanelContent
           key={product.id}
           product={product}
-          categoryName={categoryName}
           onAdd={onAdd}
           onRequestClose={requestClose}
         />

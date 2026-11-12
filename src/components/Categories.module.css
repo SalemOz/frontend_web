@@ -18,9 +18,11 @@
   transition: transform 0.2s;
 }
 
-.categoryCard:hover {
-  color: white;
-  transform: translateY(-4px);
+@media (hover: hover) {
+  .categoryCard:hover {
+    color: white;
+    transform: translateY(-4px);
+  }
 }
 
 .categoryImage {

@@ -22,7 +22,6 @@ export default function Categories() {
               <ProductImage
                 image={category.image}
                 alt={category.name}
-                label={category.name}
                 className={styles.categoryImage}
               />
               <div className={styles.categoryInfo}>

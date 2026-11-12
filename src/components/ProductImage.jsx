@@ -1,17 +1,17 @@
 import styles from './ProductImage.module.css';
 
 /**
- * Foto de un producto o recuadro de relleno con el nombre de su categoría
- * mientras no haya fotos reales. El alto lo define quien lo usa (className).
+ * Foto de un producto o, mientras no haya fotos reales, un relleno con el
+ * logo del local. El alto lo define quien lo usa (className).
  */
-export default function ProductImage({ image, alt = '', label = 'Producto', className }) {
+export default function ProductImage({ image, alt = '', className }) {
   return (
     <span className={`${styles.frame} ${className ?? ''}`}>
       {image ? (
         <img className={styles.image} src={image} alt={alt} loading="lazy" decoding="async" />
       ) : (
         <span className={styles.placeholder} aria-hidden="true">
-          {label}
+          <img src="/brand/logo-delicias-192.png" alt="" loading="lazy" decoding="async" />
         </span>
       )}
     </span>
