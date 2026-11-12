@@ -5,6 +5,7 @@ import { formatPrice } from '../data/menu.js';
 import { business } from '../data/business.js';
 import ProductImage from '../components/ProductImage.jsx';
 import { createOrder, saveLastOrder } from '../utils/order.js';
+import { validateCheckout } from '../utils/checkout.js';
 import Icon from '../components/Icon.jsx';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import styles from './Cart.module.css';
@@ -26,9 +27,41 @@ export default function Cart() {
   const total = subtotal + deliveryFee;
 
   const [saveFailed, setSaveFailed] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [isConfirmingClear, setIsConfirmingClear] = useState(false);
+  const isPickup = deliveryType === 'local';
 
-  const handleCheckout = () => {
-    const order = createOrder(items, customer, deliveryFee);
+  const updateField = (field) => (event) => {
+    setCustomer({ ...customer, [field]: event.target.value });
+    if (errors[field]) setErrors({ ...errors, [field]: undefined });
+  };
+
+  const fieldProps = (field) => ({
+    id: `checkout-${field}`,
+    value: customer[field],
+    onChange: updateField(field),
+    'aria-invalid': errors[field] ? true : undefined,
+    'aria-describedby': errors[field] ? `checkout-${field}-error` : undefined,
+  });
+
+  const fieldError = (field) =>
+    errors[field] && (
+      <span id={`checkout-${field}-error`} className={styles.fieldError}>
+        {errors[field]}
+      </span>
+    );
+
+  const handleCheckout = (event) => {
+    event.preventDefault();
+    const nextErrors = validateCheckout(customer, deliveryType);
+    const firstInvalid = ['name', 'phone', 'address'].find((field) => nextErrors[field]);
+    setErrors(nextErrors);
+    if (firstInvalid) {
+      document.getElementById(`checkout-${firstInvalid}`)?.focus();
+      return;
+    }
+
+    const order = createOrder(items, isPickup ? { ...customer, address: '' } : customer, deliveryFee);
     const saved = saveLastOrder(order);
     setSaveFailed(!saved);
     if (!saved) return;
@@ -54,12 +87,6 @@ export default function Cart() {
           </div>
         ) : (
           <>
-            <ol className={styles.steps} aria-label="Progreso del pedido">
-              <li className={styles.currentStep}><span>1</span> Carrito</li>
-              <li><span>2</span> Datos y entrega</li>
-              <li><span>3</span> Confirmación</li>
-            </ol>
-
             <div className={styles.layout}>
             <div>
               <div className={styles.listHeader}>
@@ -127,6 +154,7 @@ export default function Cart() {
               <Icon name="arrow-left" /> Seguir agregando
             </Link>
 
+              <form id="checkout-form" noValidate onSubmit={handleCheckout}>
               <section className={styles.formCard}>
                 <h2 id="cart-delivery-title">¿Cómo lo quieres?</h2>
                 <div className={styles.choiceGrid} role="radiogroup" aria-labelledby="cart-delivery-title">
@@ -153,16 +181,22 @@ export default function Cart() {
                 </div>
                 <div className={styles.fields}>
                   <label>Nombre
-                    <input autoComplete="name" value={customer.name} onChange={(event) => setCustomer({ ...customer, name: event.target.value })} />
+                    <input autoComplete="name" required {...fieldProps('name')} />
+                    {fieldError('name')}
                   </label>
                   <label>Teléfono
-                    <input type="tel" autoComplete="tel" value={customer.phone} onChange={(event) => setCustomer({ ...customer, phone: event.target.value })} />
+                    <input type="tel" inputMode="tel" autoComplete="tel" required {...fieldProps('phone')} />
+                    {fieldError('phone')}
                   </label>
-                  <label className={styles.fullField}>Dirección y barrio
-                    <input autoComplete="street-address" value={customer.address} onChange={(event) => setCustomer({ ...customer, address: event.target.value })} />
-                  </label>
-                  <label className={styles.fullField}>Notas para tu pedido (opcional)
-                    <input autoComplete="off" placeholder="Sin cebolla, timbre dañado…" value={customer.notes} onChange={(event) => setCustomer({ ...customer, notes: event.target.value })} />
+                  {!isPickup && (
+                    <label className={styles.fullField}>Dirección y barrio
+                      <input autoComplete="street-address" required {...fieldProps('address')} />
+                      {fieldError('address')}
+                    </label>
+                  )}
+                  <label className={styles.fullField}>
+                    {isPickup ? 'Notas para tu pedido (opcional)' : 'Indicaciones para el domiciliario (opcional)'}
+                    <input autoComplete="off" placeholder={isPickup ? 'Paso a las 8:00 p. m.…' : 'Casa esquinera, timbre dañado…'} {...fieldProps('notes')} />
                   </label>
                 </div>
               </section>
@@ -171,16 +205,17 @@ export default function Cart() {
                 <h2 id="cart-payment-title">Método de pago</h2>
                 <div className={styles.choiceList} role="radiogroup" aria-labelledby="cart-payment-title">
                   <label className={paymentMethod === 'efectivo' ? styles.selectedChoice : styles.choice}>
-                    <input type="radio" name="pago" checked={paymentMethod === 'efectivo'} onChange={() => setPaymentMethod('efectivo')} />
+                    <input type="radio" name="pago" value="efectivo" checked={paymentMethod === 'efectivo'} onChange={() => setPaymentMethod('efectivo')} />
                     Efectivo al recibir
                   </label>
                   <label className={paymentMethod === 'transferencia' ? styles.selectedChoice : styles.choice}>
-                    <input type="radio" name="pago" checked={paymentMethod === 'transferencia'} onChange={() => setPaymentMethod('transferencia')} />
+                    <input type="radio" name="pago" value="transferencia" checked={paymentMethod === 'transferencia'} onChange={() => setPaymentMethod('transferencia')} />
                     Transferencia / medio de pago
                   </label>
                 </div>
                 <p className={styles.formNote}>Pago de demostración: no se envían datos a ninguna pasarela.</p>
               </section>
+              </form>
             </div>
 
             <aside className={styles.summary} aria-label="Resumen del pedido">
@@ -203,24 +238,38 @@ export default function Cart() {
                 <strong>{formatPrice(total)}</strong>
               </div>
               <button
-                type="button"
+                type="submit"
+                form="checkout-form"
                 className={`btn-primary ${styles.checkout}`}
-                onClick={handleCheckout}
               >
                 Finalizar pedido <Icon name="arrow-right" />
               </button>
+              {Object.values(errors).some(Boolean) && (
+                <p className={styles.error} role="alert">
+                  Faltan datos de entrega. Revisa los campos marcados.
+                </p>
+              )}
               {saveFailed && (
                 <p className={styles.error} role="alert">
                   No pudimos guardar tu pedido en este navegador. Revisa que no
                   estés en una ventana privada e inténtalo de nuevo.
                 </p>
               )}
-              <button type="button" className={styles.clear} onClick={clear}>
-                Vaciar carrito
-              </button>
-              <p className={styles.nextStep}>
-                Confirmarás los detalles de tu pedido en el siguiente paso.
-              </p>
+              {isConfirmingClear ? (
+                <div className={styles.clearConfirm} role="group" aria-label="Confirmar vaciar carrito">
+                  <span>¿Quitar todos los productos?</span>
+                  <button type="button" className={styles.clearYes} onClick={clear}>
+                    Sí, vaciar
+                  </button>
+                  <button type="button" className={styles.clear} onClick={() => setIsConfirmingClear(false)} autoFocus>
+                    Cancelar
+                  </button>
+                </div>
+              ) : (
+                <button type="button" className={styles.clear} onClick={() => setIsConfirmingClear(true)}>
+                  Vaciar carrito
+                </button>
+              )}
             </aside>
             </div>
           </>

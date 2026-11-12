@@ -3,9 +3,6 @@
 .empty h2 { margin: 17px 0 0; color: var(--cream); font-size: clamp(22px, 3vw, 30px); }
 .empty p { max-width: 390px; margin: 9px 0 22px; line-height: 1.6; }
 .emptyIcon { display: grid; place-items: center; width: 68px; height: 68px; border: 1px solid var(--orange); border-radius: 50%; color: var(--orange); }
-.steps { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 28px; padding: 0; list-style: none; }
-.steps li { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; border: 1px solid #3a3a3a; border-radius: var(--radius-pill); color: var(--muted); font-size: 14px; font-weight: 800; }
-.steps .currentStep { border-color: var(--orange); background: var(--orange); color: var(--on-orange); }
 .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); align-items: start; gap: 28px; }
 .listHeader { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; margin: 0 0 14px; }
 .listHeader h2, .summary h2 { margin: 0; color: var(--cream); font-size: 22px; }
@@ -32,7 +29,9 @@
 .selectedChoice { border: 2px solid var(--orange); background: #1b130a; }
 .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .fields label { display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 13px; }
-.fields input { min-height: 46px; padding: 0 14px; border: 1px solid var(--border-control); border-radius: 12px; background: var(--black); color: var(--cream); font: inherit; }
+.fields input { min-height: 46px; padding: 0 14px; border: 1px solid var(--border-control); border-radius: 12px; background: var(--black); color: var(--cream); font: inherit; font-size: 16px; }
+.fields input[aria-invalid="true"] { border-color: var(--error); }
+.fieldError { color: var(--error); font-size: 14px; line-height: 1.4; }
 .fullField { grid-column: span 2; }
 .choiceList { display: flex; flex-direction: column; gap: 16px; }
 .error { margin: 0; color: var(--error); font-size: 13px; line-height: 1.5; }
@@ -46,6 +45,8 @@
 .checkout { width: 100%; margin-top: 8px; }
 .clear { min-height: 44px; padding: 8px; border: 0; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
 .clear:hover { color: var(--orange); }
-.nextStep { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; text-align: center; }
+.clearConfirm { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 8px; color: var(--cream); font-size: 14px; }
+.clearConfirm span { flex-basis: 100%; text-align: center; }
+.clearYes { min-height: 44px; padding: 8px 16px; border: 1px solid var(--error); border-radius: var(--radius-pill); background: transparent; color: var(--error); font-size: 14px; font-weight: 800; cursor: pointer; }
 @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .summary { position: static; } }
-@media (max-width: 600px) { .page { padding: 36px 0 70px; } .steps { gap: 8px; } .steps li { padding: 7px 12px; font-size: 12px; } .line { grid-template-columns: 56px 1fr; } .productImage { width: 56px; height: 56px; } .lineTotal { grid-column: 2; justify-self: end; } .empty { padding: 45px 20px; } .summary { padding: 20px; } .choiceGrid, .fields { grid-template-columns: 1fr; } .fullField { grid-column: span 1; } }
+@media (max-width: 600px) { .page { padding: 36px 0 70px; } .line { grid-template-columns: 56px 1fr; } .productImage { width: 56px; height: 56px; } .lineTotal { grid-column: 2; justify-self: end; } .empty { padding: 45px 20px; } .summary { padding: 20px; } .choiceGrid, .fields { grid-template-columns: 1fr; } .fullField { grid-column: span 1; } }
