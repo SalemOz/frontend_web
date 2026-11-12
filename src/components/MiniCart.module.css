@@ -41,3 +41,8 @@
     padding-left: 18px;
   }
 }
+
+/* inline-block: el rebote al llegar el vuelo usa transform (no aplica a elementos en línea). */
+.count {
+  display: inline-block;
+}

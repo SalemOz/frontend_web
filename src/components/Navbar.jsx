@@ -67,9 +67,12 @@ export default function Navbar() {
           to="/carrito"
           className={styles.cartLink}
           aria-label="Ir al carrito de compras"
+          data-cart-target="nav"
         >
           <Icon name="cart" ratio={1.3} />
-          <span className={styles.cartCount} aria-live="polite">{count}</span>
+          <span className={styles.cartCount} aria-live="polite" data-cart-target="nav-count">
+            {count}
+          </span>
         </Link>
       </div>
     </nav>
