@@ -36,7 +36,7 @@
 .fields input { min-height: 46px; padding: 0 14px; border: 1px solid var(--border-control); border-radius: 12px; background: var(--black); color: var(--cream); font: inherit; }
 .fullField { grid-column: span 2; }
 .formNote { margin: 0; color: var(--muted); font-size: 13px; }
-.summary { position: sticky; top: 92px; display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 1px solid #5b3a1d; border-radius: 16px; background: radial-gradient(circle at right top, rgba(255, 137, 30, 0.16), transparent 42%), #181716; }
+.summary { position: sticky; top: calc(var(--navbar-height) + 22px); display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 1px solid #5b3a1d; border-radius: 16px; background: radial-gradient(circle at right top, rgba(255, 137, 30, 0.16), transparent 42%), #181716; }
 .summary h2 { margin-bottom: 6px; font-size: 27px; }
 .summaryRow { display: flex; justify-content: space-between; gap: 14px; color: var(--muted); font-size: 14px; }
 .summaryRow strong { color: var(--cream); }
