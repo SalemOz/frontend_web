@@ -11,3 +11,16 @@
     padding: 30px 0;
   }
 }
+
+/* Con la inclinación de GSAP activa (mismas condiciones que en Favorites.jsx), la
+   transición CSS de transform de la tarjeta frenaría a quickTo: solo queda la del borde. */
+@media (hover: hover) and (pointer: fine) and (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  /* Perspectiva en el contenedor: sobrevive al clearProps de la aparición al bajar. */
+  .favoritesSection :global(.product-grid) {
+    perspective: 900px;
+  }
+
+  .favoritesSection [data-product-id] {
+    transition: border-color 0.2s;
+  }
+}

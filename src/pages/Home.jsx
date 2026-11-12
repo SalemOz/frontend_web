@@ -28,7 +28,9 @@ export default function Home() {
     () => {
       if (reduced) return;
       const targets = gsap.utils.toArray(REVEAL_TARGETS, pageRef.current);
-      gsap.set(targets, { opacity: 0, y: distance.reveal });
+      // transition: none mientras anima (las tarjetas traen transition: transform en CSS);
+      // al terminar se borran los estilos en línea para que vuelva su hover de CSS.
+      gsap.set(targets, { opacity: 0, y: distance.reveal, transition: 'none' });
       ScrollTrigger.batch(targets, {
         start: 'top 85%',
         once: true,
@@ -40,6 +42,7 @@ export default function Home() {
             ease: ease.out,
             stagger: stagger.reveal,
             overwrite: true,
+            clearProps: 'opacity,transform,transition',
           }),
       });
     },
