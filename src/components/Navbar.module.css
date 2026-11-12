@@ -71,22 +71,25 @@
 }
 
 @media (max-width: 600px) {
-  /* Fila 1: logo y carrito. Fila 2: los tres enlaces repartidos a lo ancho. */
+  /* Una sola fila: logo (sin el texto de marca, el logo ya lo dice), enlaces y carrito. */
   .navbar {
-    flex-wrap: wrap;
-    gap: 6px 10px;
-    padding: 10px 5% 0;
+    gap: 4px;
+    min-height: 60px;
+    padding: 8px 4%;
+  }
+
+  .navbar :global(.brand) > span {
+    display: none;
   }
 
   .navLinks {
-    order: 3;
-    width: 100%;
-    gap: 0;
-    border-top: 1px solid var(--line-subtle);
+    flex: 1;
+    justify-content: center;
+    gap: 2px;
   }
 
   .navLinks a {
-    flex: 1;
-    font-size: 14px;
+    padding: 0 9px;
+    font-size: 15px;
   }
 }

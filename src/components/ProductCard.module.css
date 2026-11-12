@@ -6,9 +6,12 @@
   transition: border-color 0.2s, transform 0.2s;
 }
 
-.productCard:hover {
-  border-color: var(--orange);
-  transform: translateY(-3px);
+/* Solo con mouse: en pantallas táctiles el hover se queda "pegado" tras tocar. */
+@media (hover: hover) {
+  .productCard:hover {
+    border-color: var(--orange);
+    transform: translateY(-3px);
+  }
 }
 
 .clickable {
@@ -70,36 +73,75 @@
   font-size: 14px;
 }
 
+/* Móvil: lista de una columna, como una carta de domicilios. Nombre y descripción
+   junto a la imagen (derecha); precio y botón en la última fila, a todo el ancho. */
 @media (max-width: 600px) {
-  .productImage {
-    height: 110px;
+  .productCard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 88px;
+    column-gap: 12px;
+    padding: 12px;
   }
 
   .productInfo {
-    padding: 10px;
+    display: contents;
+  }
+
+  .productImage {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    width: 88px;
+    height: 88px;
+    border-radius: 8px;
+  }
+
+  .productInfo h3,
+  .productInfo p,
+  .ageRestricted {
+    grid-column: 1;
   }
 
   .productInfo h3 {
-    font-size: 15px;
+    margin-bottom: 4px;
+    font-size: 16px;
   }
 
   .productInfo p {
     display: -webkit-box;
-    min-height: 3em;
+    min-height: 0;
+    margin: 0;
     overflow: hidden;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-clamp: 2;
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .ageRestricted {
+    margin: 6px 0 0;
+  }
+
+  .price,
+  .addButton {
+    grid-row: 4;
+    margin-top: 12px;
   }
 
   .price {
-    font-size: 15px;
+    grid-column: 1;
+    align-self: center;
+    justify-self: start;
+    margin-bottom: 0;
+    font-size: 17px;
   }
 
   .addButton {
-    gap: 5px;
-    font-size: 13px;
+    grid-column: 1 / -1;
+    justify-self: end;
+    width: auto;
+    padding: 9px 18px;
+    gap: 6px;
+    font-size: 14px;
   }
 }
