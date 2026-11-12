@@ -1,3 +1,29 @@
+# Delicias al Carbón
+
+Web de pedidos del asadero Delicias al Carbón (Yaguará, Huila). React + Vite.
+
+## Comandos
+
+- `npm run dev`: servidor de desarrollo.
+- `npm run build`: compilación de producción.
+- `npm run lint`: ESLint.
+- `npm test`: pruebas con el runner de Node (`node --test`), sin dependencias extra.
+
+## Simular el estado del local (abierto / cerrado)
+
+El estado se calcula con la hora de Colombia (`src/utils/businessStatus.js`) y se
+actualiza cada 30 s. Para demos se puede forzar desde la URL:
+
+- `?estado=abierto`: simula las 7:30 p. m. (chip verde, carrito habilitado).
+- `?estado=cerrado`: simula las 3:00 p. m. (chip rojo, aviso en el carrito y botón de envío bloqueado).
+- `?estado=real`: vuelve a la hora real.
+
+La simulación se guarda en `sessionStorage` (clave `delicias.estadoSimulado.v1`), así que
+se mantiene al navegar dentro de la web y se pierde al cerrar la pestaña.
+Ejemplo: `http://localhost:5173/?estado=cerrado`.
+
+---
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from './Icon.jsx';
-import { business } from '../data/business.js';
-import { isOpenAt } from '../utils/hours.js';
+import StatusChip from './StatusChip.jsx';
+import { useBusinessStatus } from '../hooks/useBusinessStatus.js';
 import styles from './Hero.module.css';
-
-// '5:00 p. m. a 11:00 p. m.' → ['5:00 p. m.', '11:00 p. m.']
-const [OPEN_LABEL, CLOSE_LABEL] = business.hours.label.split(' a ');
 
 // El video pesa 8,7 MB: solo se reproduce en pantallas medianas o grandes, sin
 // "reducir movimiento" ni ahorro de datos. En el resto queda el póster.
@@ -20,8 +17,7 @@ const POSTER_URL =
 
 export default function Hero() {
   const [playVideo] = useState(shouldPlayVideo);
-  // shortcut: se calcula al abrir Inicio; no cambia si la página queda abierta al cruzar la hora.
-  const [isOpen] = useState(() => isOpenAt(business.hours));
+  const status = useBusinessStatus();
 
   return (
     <section className={styles.hero} id="inicio">
@@ -39,6 +35,7 @@ export default function Hero() {
         <source src="/videos/hero-burger.mp4" type="video/mp4" />
       </video>
       <div className={styles.heroContent}>
+        <StatusChip status={status} className={styles.heroChip} />
         <span className="eyebrow">HECHO AL CARBÓN</span>
         <h1>
           Sabor al <em>carbón</em>, sin esperas.
@@ -50,11 +47,6 @@ export default function Hero() {
         <Link to="/menu" className="btn-primary">
           EXPLORAR MENÚ <Icon name="arrow-right" />
         </Link>
-        <p className={`${styles.status} ${isOpen ? styles.open : ''}`}>
-          {isOpen
-            ? `Abierto ahora · hasta las ${CLOSE_LABEL}`
-            : `Cerrado ahora · abrimos a las ${OPEN_LABEL}`}
-        </p>
       </div>
     </section>
   );

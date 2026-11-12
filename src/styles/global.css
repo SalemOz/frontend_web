@@ -33,6 +33,9 @@
   --border-control: #7a6f63;
   /* Mensajes de error: 7,8:1 sobre los fondos oscuros. */
   --error: #ff8a7a;
+  /* Estado del local (StatusChip): punto verde o rojo. */
+  --status-open: #4cd07d;
+  --status-closed: #ff6b5e;
   /* Navbar.jsx lo reemplaza por el alto medido. */
   --navbar-height: 70px;
 }
