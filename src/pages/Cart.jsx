@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useTransitionNavigate } from '../motion/transitionContext.js';
 import { useCart } from '../context/CartContext.jsx';
 import { formatPrice } from '../data/menu.js';
 import { business } from '../data/business.js';
@@ -14,7 +15,7 @@ import styles from './Cart.module.css';
 
 export default function Cart() {
   const { items, count, subtotal, increase, decrease, remove, clear } = useCart();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   useDocumentTitle('Carrito');
   const [deliveryType, setDeliveryType] = useState('domicilio');
   const [paymentMethod, setPaymentMethod] = useState('efectivo');

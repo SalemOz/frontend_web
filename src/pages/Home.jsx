@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useTransitionNavigate } from '../motion/transitionContext.js';
 import Hero from '../components/Hero.jsx';
 import Categories from '../components/Categories.jsx';
 import Favorites from '../components/Favorites.jsx';
@@ -9,7 +9,7 @@ import { notify } from '../lib/uikit.js';
 
 export default function Home() {
   const { addItem } = useCart();
-  const navigate = useNavigate();
+  const navigate = useTransitionNavigate();
   const [addedId, markAdded] = useAddedFeedback();
 
   // El panel de personalización vive en el Menú: los productos con opciones se abren allí.
