@@ -60,8 +60,10 @@ const createClone = (src, startX, startY) => {
 };
 
 const removeClone = (clone) => {
-  active.get(clone)?.kill();
-  active.delete(clone);
+  const timeline = active.get(clone);
+  // Primero se saca del registro: kill() dispara onInterrupt, que vuelve a llamar aquí.
+  if (!active.delete(clone)) return;
+  timeline.kill();
   clone.remove();
 };
 
