@@ -56,12 +56,6 @@ export default function Hero() {
             : `Cerrado ahora · abrimos a las ${OPEN_LABEL}`}
         </p>
       </div>
-
-      <div className={styles.heroBadge}>
-        <span>★</span>
-        Sabor en cada
-        <strong>bocado</strong>
-      </div>
     </section>
   );
 }
