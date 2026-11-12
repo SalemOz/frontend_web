@@ -64,3 +64,8 @@
 .closedNotice { margin: 0 0 22px; padding: 14px 18px; border: 1px solid rgba(255, 138, 122, 0.5); border-radius: 14px; background: #1f1412; color: var(--cream); font-size: 15px; line-height: 1.5; }
 .closedNotice strong { color: var(--error); }
 .page :global(.btn-primary)[aria-disabled="true"] { background: #3a332c; color: var(--cream); cursor: not-allowed; transform: none; white-space: normal; text-align: center; }
+
+/* Rebote y destello del precio de la línea al cambiar la cantidad (useCartMotion):
+   inline-block para el transform; el destello es un fondo naranja claro que solo cambia de opacidad. */
+.lineTotal { position: relative; display: inline-block; isolation: isolate; }
+.priceFlash { position: absolute; inset: -4px -8px; z-index: -1; border-radius: 8px; background: rgba(255, 171, 80, 0.28); opacity: 0; pointer-events: none; }

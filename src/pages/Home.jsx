@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import { useTransitionNavigate } from '../motion/transitionContext.js';
-import { gsap, ScrollTrigger, useGSAP } from '../motion/gsap.js';
+import { gsap, useGSAP } from '../motion/gsap.js';
 import { useMotion } from '../motion/useMotion.js';
-import { distance, duration, ease, stagger } from '../motion/tokens.js';
+import { revealOnScroll } from '../motion/reveal.js';
+import { cancelFlights, flyToCart } from '../motion/cartFlight.js';
 import Hero from '../components/Hero.jsx';
 import Marquee from '../components/Marquee.jsx';
 import Categories from '../components/Categories.jsx';
@@ -22,29 +23,12 @@ export default function Home() {
   const { reduced } = useMotion();
   const pageRef = useRef(null);
 
-  // Aparición al bajar, una sola vez por elemento, a ~85 % del alto de la ventana.
-  // Se ocultan con gsap.set antes del primer pintado; con "reducir movimiento" no se tocan.
+  // Aparición al bajar (src/motion/reveal.js); con "reducir movimiento" no se tocan.
   useGSAP(
     () => {
-      if (reduced) return;
-      const targets = gsap.utils.toArray(REVEAL_TARGETS, pageRef.current);
-      // transition: none mientras anima (las tarjetas traen transition: transform en CSS);
-      // al terminar se borran los estilos en línea para que vuelva su hover de CSS.
-      gsap.set(targets, { opacity: 0, y: distance.reveal, transition: 'none' });
-      ScrollTrigger.batch(targets, {
-        start: 'top 85%',
-        once: true,
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            opacity: 1,
-            y: 0,
-            duration: duration.base,
-            ease: ease.out,
-            stagger: stagger.reveal,
-            overwrite: true,
-            clearProps: 'opacity,transform,transition',
-          }),
-      });
+      if (reduced) return undefined;
+      revealOnScroll(gsap.utils.toArray(REVEAL_TARGETS, pageRef.current));
+      return cancelFlights;
     },
     { scope: pageRef, dependencies: [reduced] },
   );
@@ -59,6 +43,11 @@ export default function Home() {
     addItem(product);
     markAdded(product.id);
     notify(`Agregado: ${product.name} ×1`);
+    // El carrito ya está actualizado; el vuelo es solo visual.
+    flyToCart({
+      from: pageRef.current?.querySelector(`[data-product-id="${product.id}"] img`),
+      image: product.image,
+    });
   };
 
   return (

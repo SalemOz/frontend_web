@@ -1,0 +1,17 @@
+/* Ventana del número: recorta el valor que sale y el que entra. */
+.box {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.box > span {
+  display: inline-block;
+}
+
+.old {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
