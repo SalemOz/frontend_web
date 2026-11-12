@@ -1,0 +1,35 @@
+/* Cortina de parrilla: oculta y sin capturar clics en reposo. GSAP la muestra solo
+   durante el cambio de página. Debajo del enlace "Saltar al contenido" (z-index 200). */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Más ancho que la pantalla: las barras van inclinadas y deben cubrir los bordes. */
+.bars {
+  position: absolute;
+  inset: -10% -12%;
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* 1/8 del ancho + 2 px de solape para que no se vean rendijas. */
+  width: calc(12.5% + 2px);
+  background: #101010;
+  box-shadow: inset -3px 0 0 rgba(255, 137, 30, 0.18);
+}
+
+.logo {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}

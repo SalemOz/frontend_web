@@ -16,6 +16,7 @@ export default function Categories() {
           {categories.map((category) => (
             <Link
               className={styles.categoryCard}
+              data-reveal
               to={`/menu?categoria=${category.id}`}
               key={category.id}
             >
