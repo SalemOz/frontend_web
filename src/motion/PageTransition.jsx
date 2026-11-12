@@ -92,17 +92,28 @@ export function PageTransition({ children }) {
         // Clics repetidos durante la transición: se ignoran (no se encolan).
         if (busy) return;
         busy = true;
-        const watchdog = window.setTimeout(finish, WATCHDOG_MS);
+        let navigated = false;
+        const navigateOnce = () => {
+          if (navigated) return;
+          navigated = true;
+          navigate(to, options);
+        };
+        // Si la animación se detiene (p. ej. pestaña oculta a mitad), igual se navega
+        // y se retira la cortina: nunca queda atascada ni se pierde el clic.
+        const watchdog = window.setTimeout(() => {
+          navigateOnce();
+          finish();
+        }, WATCHDOG_MS);
 
-        gsap
-          .timeline({
-            onComplete: async () => {
-              navigate(to, options);
-              // Layout hace scroll arriba y pone el foco en el h1 detrás de la cortina.
-              await waitForPage(target.pathname);
-              uncover(watchdog);
-            },
-          })
+        const cover = gsap.timeline({
+          onComplete: async () => {
+            navigateOnce();
+            // Layout hace scroll arriba y pone el foco en el h1 detrás de la cortina.
+            await waitForPage(target.pathname);
+            uncover(watchdog);
+          },
+        });
+        cover
           .set(curtain, { autoAlpha: 1, pointerEvents: 'auto' })
           .set(bars, { willChange: 'transform' })
           .to(bars, { yPercent: 0, duration: barTime, ease: ease.inOut, stagger: spread })
