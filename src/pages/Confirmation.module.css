@@ -137,3 +137,40 @@
     padding: 36px 0 70px;
   }
 }
+
+/* Visto verde (se dibuja con GSAP: stroke-dashoffset) y su contenedor de chispas. */
+.badge {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 14px;
+}
+
+.badge circle,
+.badge path {
+  fill: none;
+  stroke: var(--status-open);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sparks {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c4 0%, #ffc04d 40%, #ff891e 70%);
+}
+
+/* Letras del número de pedido: inline-block para moverlas con transform. */
+.char {
+  display: inline-block;
+}

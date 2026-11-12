@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { gsap, useGSAP } from './gsap.js';
 import { useMotion } from './useMotion.js';
 import { TransitionContext } from './transitionContext.js';
+import { markCurtainActive, markCurtainDone } from './curtain.js';
 import { curtainMaxWaitMs, duration, ease } from './tokens.js';
 import styles from './PageTransition.module.css';
 
@@ -67,6 +68,8 @@ export function PageTransition({ children }) {
         gsap.set(bars, { yPercent: -110, skewX: BAR_SKEW, willChange: 'auto' });
         gsap.set(logo, { opacity: 0, scale: 0.85 });
         busy = false;
+        // Aviso para quien espera a que se retire (p. ej. la secuencia de Confirmación).
+        markCurtainDone();
       });
       finish();
 
@@ -92,6 +95,7 @@ export function PageTransition({ children }) {
         // Clics repetidos durante la transición: se ignoran (no se encolan).
         if (busy) return;
         busy = true;
+        markCurtainActive();
         let navigated = false;
         const navigateOnce = () => {
           if (navigated) return;
