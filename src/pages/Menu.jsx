@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { categories, products } from '../data/menu.js';
 import { business } from '../data/business.js';
 import ProductCard from '../components/ProductCard.jsx';
 import MiniCart from '../components/MiniCart.jsx';
+import ProductPanel from '../components/ProductPanel.jsx';
 import { useCart } from '../context/CartContext.jsx';
+import { useAddedFeedback } from '../hooks/useAddedFeedback.js';
+import { getProductGroups } from '../utils/product.js';
 import styles from './Menu.module.css';
 
 // Sin tildes ni mayúsculas: "clasica" encuentra "Clásica".
@@ -39,9 +42,15 @@ const menuHref = (categoryId, query) => {
 // Layout no mueve el scroll ni el foco cuando la navegación trae este estado.
 const KEEP_FOCUS = { replace: true, state: { keepFocus: true } };
 
+// overlay: la entrada del historial es el panel abierto sobre la misma página.
+// openedHere distingue el panel abierto con un clic del que llega por enlace directo.
+const PANEL_STATE = { keepFocus: true, overlay: true, openedHere: true };
+
 export default function Menu() {
   const { addItem } = useCart();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [addedId, markAdded] = useAddedFeedback();
   const [searchParams, setSearchParams] = useSearchParams();
   const tabsRef = useRef(null);
   const searchInputRef = useRef(null);
@@ -104,6 +113,42 @@ export default function Menu() {
     searchInputRef.current?.focus();
   };
 
+  // Un ?producto= que no exista se ignora.
+  const panelProduct =
+    products.find((product) => product.id === searchParams.get('producto')) ?? null;
+
+  const selectProduct = (product) => {
+    if (getProductGroups(product).length === 0) {
+      addItem(product);
+      markAdded(product.id);
+      return;
+    }
+
+    const next = new URLSearchParams(searchParams);
+    next.set('producto', product.id);
+    setSearchParams(next, { state: PANEL_STATE });
+  };
+
+  const closePanel = () => {
+    if (!searchParams.has('producto')) return;
+
+    // Abierto desde esta página: Atrás devuelve a la URL anterior.
+    if (location.state?.openedHere) {
+      navigate(-1);
+      return;
+    }
+
+    // Enlace directo: no hay entrada anterior a la que volver.
+    const next = new URLSearchParams(searchParams);
+    next.delete('producto');
+    setSearchParams(next, KEEP_FOCUS);
+  };
+
+  const addFromPanel = (product, options, note, quantity) => {
+    addItem(product, options, note, quantity);
+    markAdded(product.id);
+  };
+
   useEffect(() => {
     const originalTitle = document.title;
     return () => {
@@ -129,7 +174,8 @@ export default function Menu() {
           key={product.id}
           product={product}
           categoryName={categoryName}
-          onAdd={addItem}
+          isAdded={addedId === product.id}
+          onSelect={selectProduct}
         />
       ))}
     </div>
@@ -245,6 +291,15 @@ export default function Menu() {
       </div>
 
       <MiniCart />
+
+      <ProductPanel
+        product={panelProduct}
+        categoryName={
+          categories.find((category) => category.id === panelProduct?.categoryId)?.name
+        }
+        onAdd={addFromPanel}
+        onClose={closePanel}
+      />
     </section>
   );
 }

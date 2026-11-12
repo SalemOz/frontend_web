@@ -11,6 +11,10 @@
   transform: translateY(-3px);
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .productImage {
   display: block;
   width: 100%;

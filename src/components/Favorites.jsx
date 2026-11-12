@@ -15,7 +15,7 @@ const recommendedProducts = recommendedProductIds
   .map((id) => products.find((product) => product.id === id))
   .filter(Boolean);
 
-export default function Favorites({ onAdd }) {
+export default function Favorites({ addedId, onSelect }) {
   return (
     <section className={styles.favoritesSection} id="favoritos">
       <div className="container">
@@ -30,7 +30,8 @@ export default function Favorites({ onAdd }) {
               key={product.id}
               product={product}
               categoryName={categoryNames.get(product.categoryId)}
-              onAdd={onAdd}
+              isAdded={addedId === product.id}
+              onSelect={onSelect}
             />
           ))}
         </div>
