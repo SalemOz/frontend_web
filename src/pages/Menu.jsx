@@ -199,7 +199,7 @@ export default function Menu() {
     <section className={styles.page}>
       <div className="container">
         <span className="eyebrow">NUESTRA CARTA</span>
-        <h1 className={styles.title}>Menú</h1>
+        <h1 className="page-title">Menú</h1>
         <p className={styles.intro}>
           Elige una categoría o busca un producto. Los precios están en pesos
           colombianos.

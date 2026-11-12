@@ -26,7 +26,7 @@ export default function Confirmation() {
     <section className={styles.page}>
       <div className="container">
         <span className="eyebrow">PEDIDO RECIBIDO</span>
-        <h1 className={styles.title}>Confirmación</h1>
+        <h1 className="page-title">Confirmación</h1>
         <p className={styles.lead}>
           ¡Gracias por tu pedido! Guarda el número para reclamarlo en el local.
         </p>

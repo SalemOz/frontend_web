@@ -39,7 +39,7 @@ export default function Cart() {
     <section className={styles.page}>
       <div className="container">
         <span className="eyebrow">TU PEDIDO</span>
-        <h1 className={styles.title}>Carrito</h1>
+        <h1 className="page-title">Carrito</h1>
 
         {items.length === 0 ? (
           <div className={styles.empty}>

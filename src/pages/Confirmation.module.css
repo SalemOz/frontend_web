@@ -2,14 +2,6 @@
   padding: 56px 0 90px;
 }
 
-.title {
-  margin: 6px 0 10px;
-  font-size: clamp(32px, 5vw, 46px);
-  line-height: 1;
-  text-transform: uppercase;
-  color: var(--cream);
-}
-
 .lead {
   max-width: 55ch;
   margin: 0 0 24px;
@@ -23,7 +15,7 @@
   max-width: 460px;
   margin: 0 0 22px;
   padding: 18px;
-  border: 1px solid #292929;
+  border: 1px solid var(--line-subtle);
   border-radius: 14px;
   background: var(--card);
 }

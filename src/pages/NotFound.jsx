@@ -6,7 +6,7 @@ export default function NotFound() {
     <section className={styles.page}>
       <div className="container">
         <span className="eyebrow">ERROR 404</span>
-        <h1 className={styles.title}>Página no encontrada</h1>
+        <h1 className="page-title">Página no encontrada</h1>
         <p className={styles.message}>
           La dirección que buscas no existe o cambió de lugar.
         </p>
