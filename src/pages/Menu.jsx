@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { categories, products } from '../data/menu.js';
-import { business } from '../data/business.js';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import ProductCard from '../components/ProductCard.jsx';
 import MiniCart from '../components/MiniCart.jsx';
 import ProductPanel from '../components/ProductPanel.jsx';
@@ -149,17 +149,7 @@ export default function Menu() {
     markAdded(product.id);
   };
 
-  useEffect(() => {
-    const originalTitle = document.title;
-    return () => {
-      document.title = originalTitle;
-    };
-  }, []);
-
-  const pageName = selectedCategory?.name ?? 'Menú';
-  useEffect(() => {
-    document.title = `${pageName} | ${business.name}`;
-  }, [pageName]);
+  useDocumentTitle(selectedCategory?.name ?? 'Menú');
 
   useEffect(() => {
     tabsRef.current

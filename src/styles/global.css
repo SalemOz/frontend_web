@@ -171,6 +171,24 @@ button:focus-visible {
 
 /* ---------- Compartidas por varios componentes ---------- */
 
+/* Primer Tab de cada página: salta el navbar. Solo se ve con foco. */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  z-index: 200;
+  padding: 12px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--orange);
+  color: var(--on-orange);
+  font-weight: 800;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
 /* Carga y error de página (PageBoundary). */
 .page-status {
   min-height: 50vh;

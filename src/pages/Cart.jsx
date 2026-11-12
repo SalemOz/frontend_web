@@ -6,11 +6,13 @@ import { business } from '../data/business.js';
 import ProductImage from '../components/ProductImage.jsx';
 import { createOrder, saveLastOrder } from '../utils/order.js';
 import Icon from '../components/Icon.jsx';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import styles from './Cart.module.css';
 
 export default function Cart() {
   const { items, count, subtotal, increase, decrease, remove, clear } = useCart();
   const navigate = useNavigate();
+  useDocumentTitle('Carrito');
   const [deliveryType, setDeliveryType] = useState('domicilio');
   const [paymentMethod, setPaymentMethod] = useState('efectivo');
   const [customer, setCustomer] = useState({

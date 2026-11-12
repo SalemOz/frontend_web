@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import styles from './NotFound.module.css';
 
 export default function NotFound() {
+  useDocumentTitle('Página no encontrada');
   return (
     <section className={styles.page}>
       <div className="container">

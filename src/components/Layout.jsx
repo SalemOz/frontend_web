@@ -25,21 +25,39 @@ export default function Layout() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     const main = mainRef.current;
-    const heading = main?.querySelector('h1');
-    const target = heading ?? main;
-    if (!target) return;
+    if (!main) return;
 
-    if (!target.hasAttribute('tabindex')) {
-      target.setAttribute('tabindex', '-1');
+    const focusHeading = (heading) => {
+      if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: true });
+    };
+
+    const heading = main.querySelector('h1');
+    if (heading) {
+      focusHeading(heading);
+      return;
     }
 
-    target.focus({ preventScroll: true });
+    // La página aún se está descargando: foco en <main> y, cuando aparezca su
+    // h1, pasa a él (salvo que la persona ya haya movido el foco).
+    main.focus({ preventScroll: true });
+    const observer = new MutationObserver(() => {
+      const lateHeading = main.querySelector('h1');
+      if (!lateHeading) return;
+      observer.disconnect();
+      if (document.activeElement === main) focusHeading(lateHeading);
+    });
+    observer.observe(main, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, [location]);
 
   return (
     <>
+      <a href="#contenido" className="skip-link">
+        Saltar al contenido
+      </a>
       <Navbar />
-      <main ref={mainRef} tabIndex={-1}>
+      <main ref={mainRef} id="contenido" tabIndex={-1}>
         {/* key: un error en una página no bloquea las demás al navegar. */}
         <PageBoundary key={location.pathname}>
           <Outlet />
