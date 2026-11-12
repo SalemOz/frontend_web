@@ -28,6 +28,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* El panel de producto bloquea el scroll: sin esto la página salta de ancho. */
+  scrollbar-gutter: stable;
   scroll-padding-top: calc(var(--navbar-height) + 15px);
 }
 

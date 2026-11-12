@@ -6,20 +6,20 @@ import Footer from './Footer.jsx';
 export default function Layout() {
   const location = useLocation();
   const mainRef = useRef(null);
-  const previousLocationKey = useRef(location.key);
-  const previousPathname = useRef(location.pathname);
+  const previousLocation = useRef(location);
 
   // Al cambiar de ruta: scroll arriba y foco en el título de la página.
   // Se usa location.key para cubrir también cambios de query (?categoria=...);
   // los anclas del mismo documento (#contacto) no crean una nueva location.
   useEffect(() => {
-    if (previousLocationKey.current === location.key) return;
-    const samePage = previousPathname.current === location.pathname;
-    previousLocationKey.current = location.key;
-    previousPathname.current = location.pathname;
+    const previous = previousLocation.current;
+    if (previous.key === location.key) return;
+    previousLocation.current = location;
 
-    // La búsqueda del menú reescribe la URL en cada tecla: no se le quita el foco.
-    if (samePage && location.state?.keepFocus) return;
+    // Ni la búsqueda del menú (reescribe la URL en cada tecla) ni abrir o cerrar
+    // el panel de producto (state.overlay) mueven el scroll o el foco.
+    const samePage = previous.pathname === location.pathname;
+    if (samePage && (location.state?.keepFocus || previous.state?.overlay)) return;
 
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
@@ -33,7 +33,7 @@ export default function Layout() {
     }
 
     target.focus({ preventScroll: true });
-  }, [location.key, location.pathname, location.state]);
+  }, [location]);
 
   return (
     <>
