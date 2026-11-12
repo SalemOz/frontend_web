@@ -109,7 +109,7 @@
   display: inline-block;
   margin-top: 10px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -142,7 +142,7 @@
   border: 1px solid #504538;
   border-radius: 20px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -230,7 +230,7 @@
 .counter {
   justify-self: end;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 /* ---------- Pie ---------- */

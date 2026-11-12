@@ -24,9 +24,11 @@
   --line: #333;
   --line-subtle: #292929;
   --radius-pill: 30px;
-  --font-body: Inter, "Segoe UI", sans-serif;
-  /* Archivo no se carga todavía (ver docs/auditoria): cae a la pila del sistema. */
-  --font-display: Archivo, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Una sola familia (Archivo variable, ver main.jsx): normal para leer,
+     condensada en los títulos para el tono de carta de asadero. */
+  --font-body: "Archivo Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-body);
+  --stretch-display: 82%;
   /* Borde de campos de texto: 3,6:1 sobre --card (WCAG 1.4.11 pide 3:1). */
   --border-control: #7a6f63;
   /* Mensajes de error: 7,8:1 sobre los fondos oscuros. */
@@ -53,6 +55,7 @@ h2,
 h3 {
   margin: 0 0 20px;
   font-family: var(--font-display);
+  font-stretch: var(--stretch-display);
   font-weight: 800;
   color: var(--cream);
   text-wrap: balance;
@@ -252,7 +255,7 @@ button:focus-visible {
   font-size: 19px;
   line-height: 0.95;
   font-weight: 900;
-  letter-spacing: -0.8px;
+  letter-spacing: -0.01em;
 }
 
 .brand strong {

@@ -22,7 +22,7 @@
 .footerGrid p {
   margin: 7px 0;
   color: var(--text-soft);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -31,7 +31,7 @@
   align-items: center;
   min-height: 44px;
   color: var(--text-soft);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .footerGrid > div > a:hover {
@@ -43,7 +43,7 @@
   border-top: 1px solid var(--line);
   color: #aaa;
   text-align: center;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 @media (max-width: 900px) {

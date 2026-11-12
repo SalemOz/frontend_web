@@ -15,7 +15,7 @@
   font-size: clamp(25px, 3vw, 34px);
   line-height: 1.2;
   font-weight: 850;
-  letter-spacing: -0.7px;
+  letter-spacing: -0.005em;
 }
 
 .headingLight h2 {
