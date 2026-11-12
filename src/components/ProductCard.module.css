@@ -18,10 +18,11 @@
   cursor: pointer;
 }
 
+/* Foto cuadrada como el archivo (800×800): el ancho de la columna fija el alto. */
 .productImage {
   display: block;
   width: 100%;
-  height: 145px;
+  aspect-ratio: 1 / 1;
 }
 
 .productInfo {

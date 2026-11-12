@@ -39,12 +39,21 @@
   color: var(--orange);
 }
 
+/* #aaa sobre #080808: 8,9:1 (AA). */
 .copyright {
   padding: 18px 5%;
   border-top: 1px solid var(--line);
   color: #aaa;
   text-align: center;
   font-size: 13px;
+}
+
+.copyright p {
+  margin: 0;
+}
+
+.copyright p + p {
+  margin-top: 4px;
 }
 
 /* Tableta: la marca ocupa su propia fila; Horario y Contacto, lado a lado. */
