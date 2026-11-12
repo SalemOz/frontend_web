@@ -156,6 +156,17 @@
   border-radius: 10px;
   cursor: pointer;
   transition: border-color 0.2s, background-color 0.2s;
+  position: relative;
+}
+
+/* Destello al marcar una opción: borde naranja que se expande (GSAP: opacity/scale). */
+.flash {
+  position: absolute;
+  inset: -1px;
+  border: 2px solid var(--orange);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .option:hover {
@@ -291,7 +302,9 @@
 }
 
 .submit:disabled,
-.submit:disabled:hover {
+.submit:disabled:hover,
+.submit[aria-disabled='true'],
+.submit[aria-disabled='true']:hover {
   background: #3a342d;
   color: var(--cream);
   cursor: not-allowed;
@@ -322,39 +335,27 @@
   }
 }
 
-/* Entrada sencilla; la definitiva (y la salida) se hará con GSAP. */
+/* El panel entra y sale con GSAP (ProductPanel.jsx). El ::backdrop no es un elemento
+   del DOM y GSAP no puede animarlo: su fundido es lo único en CSS, y solo sin
+   "reducir movimiento". data-closing lo pone requestClose() durante la salida. */
 @media (prefers-reduced-motion: no-preference) {
-  .dialog[open] {
-    animation: slideFromRight 0.25s ease-out;
-  }
-
   .dialog[open]::backdrop {
-    animation: fadeIn 0.25s ease-out;
+    animation: backdropIn 0.4s ease-out;
   }
 
-  @media (max-width: 639px) {
-    .dialog[open] {
-      animation-name: slideFromBottom;
-    }
+  .dialog[data-closing]::backdrop {
+    animation: backdropOut 0.4s ease-in forwards;
   }
 }
 
-@keyframes slideFromRight {
+@keyframes backdropIn {
   from {
     opacity: 0;
-    transform: translateX(40px);
   }
 }
 
-@keyframes slideFromBottom {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-}
-
-@keyframes fadeIn {
-  from {
+@keyframes backdropOut {
+  to {
     opacity: 0;
   }
 }

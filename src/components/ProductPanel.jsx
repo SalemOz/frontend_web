@@ -2,12 +2,19 @@ import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { formatPrice } from '../data/menu.js';
 import { getProductGroups } from '../utils/product.js';
 import ProductImage from './ProductImage.jsx';
+import CountUp from '../motion/CountUp.jsx';
+import { gsap, useGSAP } from '../motion/gsap.js';
+import { useMotion } from '../motion/useMotion.js';
+import { duration, ease, panel } from '../motion/tokens.js';
 import styles from './ProductPanel.module.css';
 
 const MAX_NOTE_LENGTH = 120;
 const MIN_QUANTITY = 1;
 const MAX_QUANTITY = 20;
 const TITLE_ID = 'product-panel-title';
+const MOBILE_SHEET = '(max-width: 639px)';
+// Si la salida no termina (pestaña oculta, error), el panel se cierra igual (ms).
+const CLOSE_FALLBACK_MS = panel.out * 1000 + 300;
 
 // Un grupo obligatorio arranca con su opción por defecto, si la tiene.
 const initialSelection = (groups) =>
@@ -27,6 +34,9 @@ function PanelContent({ product, onAdd, onRequestClose }) {
   const [selection, setSelection] = useState(() => initialSelection(groups));
   const [note, setNote] = useState('');
   const [quantity, setQuantity] = useState(MIN_QUANTITY);
+  const { reduced } = useMotion();
+  const formRef = useRef(null);
+  const { contextSafe } = useGSAP({ scope: formRef });
 
   const selectedOptions = groups.flatMap((group) =>
     group.options.filter((option) => selection[group.id].includes(option.id)),
@@ -35,6 +45,27 @@ function PanelContent({ product, onAdd, onRequestClose }) {
   const missingGroup = groups.find(
     (group) => group.required && selection[group.id].length === 0,
   );
+
+  // Destello de la fila marcada: solo opacity/scale de un borde propio (data-option-flash).
+  const flashOption = contextSafe((label) => {
+    if (reduced) return;
+    gsap.fromTo(
+      label.querySelector('[data-option-flash]'),
+      { opacity: 0.9, scale: 1 },
+      { opacity: 0, scale: 1.04, duration: duration.fast, ease: ease.out },
+    );
+  });
+
+  // Sacudida corta de "Obligatorio" si se intenta agregar sin elegir.
+  const shakeBadge = contextSafe((form, groupId) => {
+    const badge = form.querySelector(`[data-required-badge="${groupId}"]`);
+    if (!badge || reduced) return;
+    gsap.fromTo(
+      badge,
+      { x: 0 },
+      { x: panel.shake, duration: 0.05, repeat: 5, yoyo: true, ease: ease.inOut, clearProps: 'transform' },
+    );
+  });
 
   const toggleOption = (group, optionId) => {
     setSelection((current) => {
@@ -51,7 +82,11 @@ function PanelContent({ product, onAdd, onRequestClose }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (missingGroup) return;
+    if (missingGroup) {
+      shakeBadge(event.currentTarget, missingGroup.id);
+      event.currentTarget.querySelector(`[name="${product.id}-${missingGroup.id}"]`)?.focus();
+      return;
+    }
 
     onAdd(
       product,
@@ -63,7 +98,7 @@ function PanelContent({ product, onAdd, onRequestClose }) {
   };
 
   return (
-    <form className={styles.panel} onSubmit={handleSubmit}>
+    <form ref={formRef} className={styles.panel} onSubmit={handleSubmit}>
       <button
         type="button"
         className={styles.close}
@@ -95,18 +130,22 @@ function PanelContent({ product, onAdd, onRequestClose }) {
           <fieldset className={styles.group} key={group.id} data-panel-item="group">
             <legend>
               {group.name}
-              <span className={styles.badge}>
+              <span className={styles.badge} data-required-badge={group.required ? group.id : undefined}>
                 {group.required ? 'Obligatorio' : 'Opcional'}
               </span>
             </legend>
             {group.options.map((option) => (
               <label className={styles.option} key={option.id}>
+                <span className={styles.flash} data-option-flash aria-hidden="true" />
                 <input
                   type={group.type === 'multiple' ? 'checkbox' : 'radio'}
                   name={`${product.id}-${group.id}`}
                   value={option.id}
                   checked={selection[group.id].includes(option.id)}
-                  onChange={() => toggleOption(group, option.id)}
+                  onChange={(event) => {
+                    toggleOption(group, option.id);
+                    flashOption(event.currentTarget.closest('label'));
+                  }}
                 />
                 <span className={styles.optionName}>{option.name}</span>
                 {option.price > 0 && (
@@ -155,16 +194,20 @@ function PanelContent({ product, onAdd, onRequestClose }) {
           </button>
         </div>
 
+        {/* aria-disabled (no disabled): así el clic llega y "Obligatorio" puede sacudirse. */}
         <button
           type="submit"
           className={`btn-primary ${styles.submit}`}
-          disabled={Boolean(missingGroup)}
+          aria-disabled={missingGroup ? true : undefined}
         >
           {missingGroup ? (
             `Elige: ${missingGroup.name}`
           ) : (
             <span>
-              Agregar · <span data-price-total>{formatPrice(unitPrice * quantity)}</span>
+              Agregar ·{' '}
+              <span data-price-total>
+                <CountUp value={unitPrice * quantity} format={formatPrice} duration={panel.priceCount} />
+              </span>
             </span>
           )}
         </button>
@@ -176,37 +219,117 @@ function PanelContent({ product, onAdd, onRequestClose }) {
 /**
  * Panel para personalizar un producto antes de agregarlo.
  * Quien lo usa decide qué producto se muestra (product o null) y qué pasa al
- * cerrar (onClose); aquí vive el <dialog> y su cierre.
+ * cerrar (onClose); aquí vive el <dialog>, su entrada y su salida animadas.
  */
 export default function ProductPanel({ product, onAdd, onClose }) {
   const dialogRef = useRef(null);
   const lastProductId = useRef(null);
+  // Salida en curso: { cancel }. Mientras dura, el contenido sigue a la vista.
+  const closingRef = useRef(null);
+  // enter/exit se crean dentro de useGSAP (contextSafe) y se guardan aquí.
+  const motionRef = useRef(null);
+  const { reduced } = useMotion();
 
-  // Único punto de cierre: aquí irá la animación de salida.
+  // El producto mostrado sobrevive a la salida animada (product ya es null).
+  const [shownProduct, setShownProduct] = useState(product);
+  if (product && product !== shownProduct) setShownProduct(product);
+
+  useGSAP(
+    (context, contextSafe) => {
+      const dialog = dialogRef.current;
+      const axis = () => (window.matchMedia(MOBILE_SHEET).matches ? 'yPercent' : 'xPercent');
+
+      motionRef.current = {
+        enter: contextSafe(() => {
+          if (reduced) return;
+          // Escritorio: desde la derecha. Móvil: desde abajo. Luego los bloques en cascada.
+          gsap.fromTo(dialog, { [axis()]: 100 }, { xPercent: 0, yPercent: 0, duration: panel.in, ease: ease.out });
+          gsap.fromTo(
+            dialog.querySelectorAll('[data-panel-item]'),
+            { opacity: 0, y: panel.itemShift },
+            {
+              opacity: 1,
+              y: 0,
+              duration: duration.base,
+              ease: ease.out,
+              delay: panel.itemsDelay,
+              stagger: panel.itemsStagger,
+              clearProps: 'opacity,transform',
+            },
+          );
+        }),
+        exit: contextSafe((onDone) =>
+          gsap.to(dialog, { [axis()]: 100, duration: panel.out, ease: 'power3.in', onComplete: onDone }),
+        ),
+        reset: contextSafe(() => {
+          gsap.killTweensOf(dialog);
+          gsap.set(dialog, { clearProps: 'transform' });
+        }),
+      };
+    },
+    { scope: dialogRef, dependencies: [reduced] },
+  );
+
+  // Único punto de cierre (×, Escape, clic en el fondo, Atrás, agregar).
+  // El estado (URL) cambia al instante; la animación solo retrasa el close() visual.
   const requestClose = () => {
     const dialog = dialogRef.current;
-    if (!dialog?.open) return;
+    if (!dialog?.open || closingRef.current) return;
 
-    dialog.close();
-    document
-      .querySelector(`[data-product-id="${lastProductId.current}"] [data-add-button]`)
-      ?.focus();
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(fallback);
+      closingRef.current = null;
+      dialog.removeAttribute('data-closing');
+      motionRef.current?.reset();
+      dialog.close();
+      setShownProduct(null);
+      document
+        .querySelector(`[data-product-id="${lastProductId.current}"] [data-add-button]`)
+        ?.focus();
+    };
+    const fallback = window.setTimeout(finish, CLOSE_FALLBACK_MS);
+    closingRef.current = {
+      cancel: () => {
+        finished = true;
+        window.clearTimeout(fallback);
+        closingRef.current = null;
+        dialog.removeAttribute('data-closing');
+        motionRef.current?.reset();
+      },
+    };
+
+    if (reduced || !motionRef.current) {
+      finish();
+    } else {
+      // data-closing: el ::backdrop se desvanece con CSS (GSAP no puede animarlo).
+      dialog.setAttribute('data-closing', '');
+      motionRef.current.exit(finish);
+    }
     onClose();
   };
 
   // Atrás quita el producto de la URL sin pasar por los botones del panel.
   const closeWhenProductLeaves = useEffectEvent(requestClose);
+  const openPanel = useEffectEvent((nextProduct) => {
+    const dialog = dialogRef.current;
+    lastProductId.current = nextProduct.id;
+    // Se vuelve a abrir mientras salía: se cancela la salida, sin estados a medias.
+    if (closingRef.current) closingRef.current.cancel();
+    if (!dialog.open) {
+      dialog.showModal();
+      motionRef.current?.enter();
+    }
+  });
 
   useEffect(() => {
-    const dialog = dialogRef.current;
-
     if (!product) {
       closeWhenProductLeaves();
       return;
     }
-
-    lastProductId.current = product.id;
-    if (!dialog.open) dialog.showModal();
+    openPanel(product);
   }, [product]);
 
   return (
@@ -225,10 +348,10 @@ export default function ProductPanel({ product, onAdd, onClose }) {
         if (event.target === event.currentTarget) requestClose();
       }}
     >
-      {product && (
+      {shownProduct && (
         <PanelContent
-          key={product.id}
-          product={product}
+          key={shownProduct.id}
+          product={shownProduct}
           onAdd={onAdd}
           onRequestClose={requestClose}
         />
