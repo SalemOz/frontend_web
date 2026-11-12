@@ -21,6 +21,7 @@ export const modifierGroups = [
     name: 'Pan o plátano',
     type: 'single',
     required: true,
+    defaultOptionId: 'pan',
     options: [
       { id: 'pan', name: 'En pan', price: 0 },
       { id: 'platano', name: 'En plátano', price: 0 },
