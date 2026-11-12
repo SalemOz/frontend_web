@@ -61,7 +61,12 @@ export default function Cart() {
       return;
     }
 
-    const order = createOrder(items, isPickup ? { ...customer, address: '' } : customer, deliveryFee);
+    const order = createOrder(
+      items,
+      isPickup ? { ...customer, address: '' } : customer,
+      deliveryFee,
+      { deliveryType, paymentMethod },
+    );
     const saved = saveLastOrder(order);
     setSaveFailed(!saved);
     if (!saved) return;
@@ -210,10 +215,10 @@ export default function Cart() {
                   </label>
                   <label className={paymentMethod === 'transferencia' ? styles.selectedChoice : styles.choice}>
                     <input type="radio" name="pago" value="transferencia" checked={paymentMethod === 'transferencia'} onChange={() => setPaymentMethod('transferencia')} />
-                    Transferencia / medio de pago
+                    Transferencia
                   </label>
                 </div>
-                <p className={styles.formNote}>Pago de demostración: no se envían datos a ninguna pasarela.</p>
+                <p className={styles.formNote}>Pagas al recibir: en la web no se cobra nada.</p>
               </section>
               </form>
             </div>
@@ -242,7 +247,7 @@ export default function Cart() {
                 form="checkout-form"
                 className={`btn-primary ${styles.checkout}`}
               >
-                Finalizar pedido <Icon name="arrow-right" />
+                Revisar y enviar <Icon name="arrow-right" />
               </button>
               {Object.values(errors).some(Boolean) && (
                 <p className={styles.error} role="alert">
