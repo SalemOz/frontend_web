@@ -58,6 +58,36 @@
   font-size: 15px;
 }
 
+/* Abierto o cerrado según la hora del local (utils/hours.js). */
+.heroContent .status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  color: #d6d1c9;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.status::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 50%;
+  background: #8a847c;
+}
+
+.heroContent .open {
+  color: var(--cream);
+}
+
+.open::before {
+  background: #4cd07d;
+  box-shadow: 0 0 0 3px rgba(76, 208, 125, 0.22);
+}
+
 /* .btn-primary vive en styles/global.css porque también lo usa ProductCard */
 .hero :global(.btn-primary) {
   margin-top: 13px;
@@ -115,6 +145,6 @@
 
   .heroContent p {
     max-width: 310px;
-    font-size: 13px;
+    font-size: 15px;
   }
 }
