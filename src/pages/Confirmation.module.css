@@ -3,16 +3,15 @@
 }
 
 .lead {
-  max-width: 55ch;
+  max-width: 46ch;
   margin: 0 0 24px;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.55;
 }
 
 .summary {
-  display: grid;
-  gap: 12px;
-  max-width: 460px;
+  max-width: 480px;
   margin: 0 0 22px;
   padding: 18px;
   border: 1px solid var(--line-subtle);
@@ -20,41 +19,117 @@
   background: var(--card);
 }
 
-.summaryRow {
+.summaryHeader {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-}
-
-.summaryRow dt {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line-subtle);
   color: var(--muted);
-  font-size: 13px;
-}
-
-.summaryRow dd {
-  margin: 0;
-  color: var(--cream);
-  font-size: 15px;
-  text-align: right;
+  font-size: 14px;
 }
 
 .orderId {
   color: var(--orange);
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: 0.6px;
 }
 
-.total {
-  font-size: 18px;
+.items {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 0;
+  list-style: none;
+  border-bottom: 1px solid var(--line-subtle);
+}
+
+.items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--cream);
+  font-size: 15px;
+}
+
+.items small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.items strong {
+  white-space: nowrap;
+}
+
+.details {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+.details div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.details dt {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.details dd {
+  margin: 0;
+  color: var(--cream);
+  font-size: 15px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.details .total {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+
+.details .total dd {
+  color: var(--orange);
+  font-size: 20px;
   font-weight: 800;
 }
 
+.send {
+  width: 100%;
+  max-width: 480px;
+  justify-content: center;
+}
+
 .note {
-  max-width: 55ch;
-  margin: 0 0 22px;
+  max-width: 480px;
+  margin: 12px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.note a {
+  color: var(--orange);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  margin-top: 14px;
+  color: var(--orange);
+  font-size: 15px;
+  font-weight: 800;
 }
 
 @media (max-width: 600px) {
