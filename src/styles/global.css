@@ -20,6 +20,8 @@
   --muted: #bcb8b1;
   /* Borde de campos de texto: 3,6:1 sobre --card (WCAG 1.4.11 pide 3:1). */
   --border-control: #7a6f63;
+  /* Mensajes de error: 7,8:1 sobre los fondos oscuros. */
+  --error: #ff8a7a;
   /* Navbar.jsx lo reemplaza por el alto medido. */
   --navbar-height: 70px;
 }

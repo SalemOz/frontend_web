@@ -23,9 +23,13 @@ export default function Cart() {
   const deliveryFee = deliveryType === 'domicilio' ? business.deliveryFee : 0;
   const total = subtotal + deliveryFee;
 
+  const [saveFailed, setSaveFailed] = useState(false);
+
   const handleCheckout = () => {
     const order = createOrder(items, customer, deliveryFee);
-    if (!saveLastOrder(order)) return;
+    const saved = saveLastOrder(order);
+    setSaveFailed(!saved);
+    if (!saved) return;
 
     clear();
     navigate('/confirmacion');
@@ -122,8 +126,8 @@ export default function Cart() {
             </Link>
 
               <section className={styles.formCard}>
-                <h2>¿Cómo lo quieres?</h2>
-                <div className={styles.choiceGrid}>
+                <h2 id="cart-delivery-title">¿Cómo lo quieres?</h2>
+                <div className={styles.choiceGrid} role="radiogroup" aria-labelledby="cart-delivery-title">
                   <label className={deliveryType === 'domicilio' ? styles.selectedChoice : styles.choice}>
                     <input
                       type="radio"
@@ -147,30 +151,32 @@ export default function Cart() {
                 </div>
                 <div className={styles.fields}>
                   <label>Nombre
-                    <input value={customer.name} onChange={(event) => setCustomer({ ...customer, name: event.target.value })} />
+                    <input autoComplete="name" value={customer.name} onChange={(event) => setCustomer({ ...customer, name: event.target.value })} />
                   </label>
                   <label>Teléfono
-                    <input type="tel" value={customer.phone} onChange={(event) => setCustomer({ ...customer, phone: event.target.value })} />
+                    <input type="tel" autoComplete="tel" value={customer.phone} onChange={(event) => setCustomer({ ...customer, phone: event.target.value })} />
                   </label>
                   <label className={styles.fullField}>Dirección y barrio
-                    <input value={customer.address} onChange={(event) => setCustomer({ ...customer, address: event.target.value })} />
+                    <input autoComplete="street-address" value={customer.address} onChange={(event) => setCustomer({ ...customer, address: event.target.value })} />
                   </label>
                   <label className={styles.fullField}>Notas para tu pedido (opcional)
-                    <input placeholder="Sin cebolla, timbre dañado…" value={customer.notes} onChange={(event) => setCustomer({ ...customer, notes: event.target.value })} />
+                    <input autoComplete="off" placeholder="Sin cebolla, timbre dañado…" value={customer.notes} onChange={(event) => setCustomer({ ...customer, notes: event.target.value })} />
                   </label>
                 </div>
               </section>
 
               <section className={styles.formCard}>
-                <h2>Método de pago</h2>
-                <label className={paymentMethod === 'efectivo' ? styles.selectedChoice : styles.choice}>
-                  <input type="radio" name="pago" checked={paymentMethod === 'efectivo'} onChange={() => setPaymentMethod('efectivo')} />
-                  Efectivo al recibir
-                </label>
-                <label className={paymentMethod === 'transferencia' ? styles.selectedChoice : styles.choice}>
-                  <input type="radio" name="pago" checked={paymentMethod === 'transferencia'} onChange={() => setPaymentMethod('transferencia')} />
-                  Transferencia / medio de pago
-                </label>
+                <h2 id="cart-payment-title">Método de pago</h2>
+                <div className={styles.choiceList} role="radiogroup" aria-labelledby="cart-payment-title">
+                  <label className={paymentMethod === 'efectivo' ? styles.selectedChoice : styles.choice}>
+                    <input type="radio" name="pago" checked={paymentMethod === 'efectivo'} onChange={() => setPaymentMethod('efectivo')} />
+                    Efectivo al recibir
+                  </label>
+                  <label className={paymentMethod === 'transferencia' ? styles.selectedChoice : styles.choice}>
+                    <input type="radio" name="pago" checked={paymentMethod === 'transferencia'} onChange={() => setPaymentMethod('transferencia')} />
+                    Transferencia / medio de pago
+                  </label>
+                </div>
                 <p className={styles.formNote}>Pago de demostración: no se envían datos a ninguna pasarela.</p>
               </section>
             </div>
@@ -201,6 +207,12 @@ export default function Cart() {
               >
                 Finalizar pedido <Icon name="arrow-right" />
               </button>
+              {saveFailed && (
+                <p className={styles.error} role="alert">
+                  No pudimos guardar tu pedido en este navegador. Revisa que no
+                  estés en una ventana privada e inténtalo de nuevo.
+                </p>
+              )}
               <button type="button" className={styles.clear} onClick={clear}>
                 Vaciar carrito
               </button>
