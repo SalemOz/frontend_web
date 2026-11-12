@@ -13,8 +13,10 @@ export default function MiniCart() {
   if (count === 0) return null;
 
   return (
+    // uk-flex*: utilidades de UIkit (src/lib/uikit-lite.less) con los mismos valores que
+    // .miniCart; el CSS Module las cubre mientras el CSS de UIkit no se ha cargado.
     <aside
-      className={styles.miniCart}
+      className={`${styles.miniCart} uk-flex uk-flex-middle uk-flex-between`}
       aria-label="Resumen del carrito"
       data-cart-target="bar"
     >
