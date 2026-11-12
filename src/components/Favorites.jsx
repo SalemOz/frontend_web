@@ -81,6 +81,7 @@ export default function Favorites({ addedId, onSelect }) {
               product={product}
               isAdded={addedId === product.id}
               onSelect={onSelect}
+              imagePriority
             />
           ))}
         </div>

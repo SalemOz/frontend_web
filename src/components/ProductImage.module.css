@@ -4,10 +4,12 @@
   background: #0d0d0d;
 }
 
+/* Cuadrada y sin deformarse: el marco define el alto y la foto lo cubre recortando. */
 .image {
   display: block;
   width: 100%;
   height: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 
