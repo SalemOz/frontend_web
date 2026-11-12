@@ -117,6 +117,9 @@
   font-size: 13px;
   white-space: nowrap;
   transition: border-color 0.2s, color 0.2s;
+  /* La píldora (fondo naranja) va detrás del texto, dentro de la pestaña. */
+  position: relative;
+  isolation: isolate;
 }
 
 .tab:hover {
@@ -126,9 +129,18 @@
 
 .activeTab {
   border-color: var(--orange);
-  background: var(--orange);
   color: var(--on-orange);
   font-weight: 800;
+}
+
+/* Fondo de la pestaña activa como elemento propio: Flip lo desliza entre pestañas.
+   Sin JS o con "reducir movimiento" se ve igual que antes (pestaña naranja). */
+.pill {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background: var(--orange);
 }
 
 /* ---------- Secciones ---------- */
