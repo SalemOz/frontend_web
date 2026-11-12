@@ -1,4 +1,5 @@
-import { Component, Suspense } from 'react';
+import { Component, Suspense, useEffect, useState } from 'react';
+import { loadUIkitStyles } from '../lib/uikit.js';
 
 /**
  * Atrapa errores al cargar o pintar una página (p. ej. un chunk que no llega
@@ -30,17 +31,41 @@ class PageErrorBoundary extends Component {
   }
 }
 
-const loading = (
-  <p className="container page-status" role="status">
-    Cargando…
-  </p>
-);
+// El spinner solo aparece si la carga tarda: en cargas rápidas (lo normal) no parpadea
+// ni pide el CSS de UIkit. Se pinta el SVG que genera UIkit, con su clase uk-spinner,
+// para no cargar la librería JS solo por esto.
+const SPINNER_DELAY_MS = 300;
+
+function Loading() {
+  const [showSpinner, setShowSpinner] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setShowSpinner(true);
+      loadUIkitStyles().catch(() => {});
+    }, SPINNER_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  return (
+    <p className="container page-status" role="status">
+      {showSpinner && (
+        <span className="uk-spinner" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 30 30">
+            <circle fill="none" stroke="currentColor" cx="15" cy="15" r="14" />
+          </svg>
+        </span>
+      )}{' '}
+      Cargando…
+    </p>
+  );
+}
 
 /** Estados de carga y error de las páginas que se cargan bajo demanda. */
 export default function PageBoundary({ children }) {
   return (
     <PageErrorBoundary>
-      <Suspense fallback={loading}>{children}</Suspense>
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </PageErrorBoundary>
   );
 }
