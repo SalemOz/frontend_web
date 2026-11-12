@@ -1,0 +1,44 @@
+// UIkit a medida: solo las variables/mixins y los componentes que usa la app.
+// Sin base, heading, text ni tema: nada que cambie tipografías, colores o pesos.
+// Lo importa únicamente src/lib/uikit.js, bajo demanda.
+
+@import (reference) '../../node_modules/uikit/src/less/components/variables.less';
+@import (reference) '../../node_modules/uikit/src/less/components/mixin.less';
+@import '../../node_modules/uikit/src/less/components/notification.less';
+@import '../../node_modules/uikit/src/less/components/spinner.less';
+@import '../../node_modules/uikit/src/less/components/flex.less';
+
+// Notificación con la marca (en Less, la última definición de una variable gana).
+// Texto crema #f6f0e5 sobre #171717: 16,6:1 (AA).
+@notification-width:                  360px;
+@notification-message-padding:       14px;
+@notification-message-background:    #171717;
+@notification-message-color:         #f6f0e5;
+@notification-message-font-size:     15px;
+@notification-message-line-height:   1.4;
+
+// Más arriba que el mini carrito y la barra del carrito (ambos pegados abajo).
+@notification-bottom-offset:          96px;
+
+.hook-notification-message() {
+  padding-inline: 20px;
+  border: 1px solid #ff891e;
+  border-radius: 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+  font-weight: 700;
+  text-align: center;
+}
+
+.uk-notification-bottom-center {
+  bottom: calc(@notification-bottom-offset + env(safe-area-inset-bottom, 0px));
+  // UIkit anima la entrada y la salida desde margin-bottom negativo: sin este recorte el
+  // aviso cruzaría por encima del mini carrito. Solo se recorta el borde de abajo (la sombra queda).
+  clip-path: inset(-60px -60px 0 -60px);
+}
+
+// Spinner del mensaje "Cargando…" en el color de la marca.
+.uk-spinner {
+  display: inline-block;
+  color: #ff891e;
+  vertical-align: middle;
+}

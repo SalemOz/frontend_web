@@ -5,6 +5,7 @@ import Favorites from '../components/Favorites.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { useAddedFeedback } from '../hooks/useAddedFeedback.js';
 import { getProductGroups } from '../utils/product.js';
+import { notify } from '../lib/uikit.js';
 
 export default function Home() {
   const { addItem } = useCart();
@@ -20,6 +21,7 @@ export default function Home() {
 
     addItem(product);
     markAdded(product.id);
+    notify(`Agregado: ${product.name} ×1`);
   };
 
   return (

@@ -8,6 +8,7 @@ import ProductPanel from '../components/ProductPanel.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { useAddedFeedback } from '../hooks/useAddedFeedback.js';
 import { getProductGroups } from '../utils/product.js';
+import { notify } from '../lib/uikit.js';
 import styles from './Menu.module.css';
 
 // Sin tildes ni mayúsculas: "clasica" encuentra "Clásica".
@@ -121,6 +122,7 @@ export default function Menu() {
     if (getProductGroups(product).length === 0) {
       addItem(product);
       markAdded(product.id);
+      notify(`Agregado: ${product.name} ×1`);
       return;
     }
 
@@ -147,6 +149,7 @@ export default function Menu() {
   const addFromPanel = (product, options, note, quantity) => {
     addItem(product, options, note, quantity);
     markAdded(product.id);
+    notify(`Agregado: ${product.name} ×${quantity}`);
   };
 
   useDocumentTitle(selectedCategory?.name ?? 'Menú');
@@ -162,7 +165,7 @@ export default function Menu() {
       {items.map((product) => (
         <ProductCard
           key={product.id}
-          product={product}
+          product={product}
           isAdded={addedId === product.id}
           onSelect={selectProduct}
         />
@@ -280,7 +283,7 @@ export default function Menu() {
       <MiniCart />
 
       <ProductPanel
-        product={panelProduct}
+        product={panelProduct}
         onAdd={addFromPanel}
         onClose={closePanel}
       />
