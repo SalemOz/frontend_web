@@ -41,7 +41,8 @@ export default function Footer() {
       </div>
 
       <div className={styles.copyright}>
-        © {new Date().getFullYear()} {business.name}. Todos los derechos reservados.
+        <p>© {new Date().getFullYear()} {business.name}. Todos los derechos reservados.</p>
+        <p>Las fotos son ilustrativas.</p>
       </div>
     </footer>
   );
