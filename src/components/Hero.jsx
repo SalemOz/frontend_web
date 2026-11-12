@@ -30,12 +30,6 @@ export default function Hero() {
           EXPLORAR MENÚ <span uk-icon="arrow-right"></span>
         </Link>
       </div>
-
-      <div className={styles.heroBadge}>
-        <span>★</span>
-        Sabor en cada
-        <strong>bocado</strong>
-      </div>
     </section>
   );
 }
