@@ -5,11 +5,15 @@ import { formatPrice } from '../data/menu.js';
 import { business } from '../data/business.js';
 import ProductImage from '../components/ProductImage.jsx';
 import { createOrder, saveLastOrder } from '../utils/order.js';
+import { validateCheckout } from '../utils/checkout.js';
+import Icon from '../components/Icon.jsx';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import styles from './Cart.module.css';
 
 export default function Cart() {
   const { items, count, subtotal, increase, decrease, remove, clear } = useCart();
   const navigate = useNavigate();
+  useDocumentTitle('Carrito');
   const [deliveryType, setDeliveryType] = useState('domicilio');
   const [paymentMethod, setPaymentMethod] = useState('efectivo');
   const [customer, setCustomer] = useState({
@@ -22,9 +26,45 @@ export default function Cart() {
   const deliveryFee = deliveryType === 'domicilio' ? business.deliveryFee : 0;
   const total = subtotal + deliveryFee;
 
-  const handleCheckout = () => {
-    const order = createOrder(items, customer, deliveryFee);
-    if (!saveLastOrder(order)) return;
+  const [saveFailed, setSaveFailed] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [isConfirmingClear, setIsConfirmingClear] = useState(false);
+  const isPickup = deliveryType === 'local';
+
+  const updateField = (field) => (event) => {
+    setCustomer({ ...customer, [field]: event.target.value });
+    if (errors[field]) setErrors({ ...errors, [field]: undefined });
+  };
+
+  const fieldProps = (field) => ({
+    id: `checkout-${field}`,
+    value: customer[field],
+    onChange: updateField(field),
+    'aria-invalid': errors[field] ? true : undefined,
+    'aria-describedby': errors[field] ? `checkout-${field}-error` : undefined,
+  });
+
+  const fieldError = (field) =>
+    errors[field] && (
+      <span id={`checkout-${field}-error`} className={styles.fieldError}>
+        {errors[field]}
+      </span>
+    );
+
+  const handleCheckout = (event) => {
+    event.preventDefault();
+    const nextErrors = validateCheckout(customer, deliveryType);
+    const firstInvalid = ['name', 'phone', 'address'].find((field) => nextErrors[field]);
+    setErrors(nextErrors);
+    if (firstInvalid) {
+      document.getElementById(`checkout-${firstInvalid}`)?.focus();
+      return;
+    }
+
+    const order = createOrder(items, isPickup ? { ...customer, address: '' } : customer, deliveryFee);
+    const saved = saveLastOrder(order);
+    setSaveFailed(!saved);
+    if (!saved) return;
 
     clear();
     navigate('/confirmacion');
@@ -34,25 +74,19 @@ export default function Cart() {
     <section className={styles.page}>
       <div className="container">
         <span className="eyebrow">TU PEDIDO</span>
-        <h1 className={styles.title}>Carrito</h1>
+        <h1 className="page-title">Carrito</h1>
 
         {items.length === 0 ? (
           <div className={styles.empty}>
-            <span className={styles.emptyIcon} uk-icon="icon: cart; ratio: 2" aria-hidden="true" />
+            <Icon name="cart" ratio={2} className={styles.emptyIcon} />
             <h2>Tu carrito está esperando algo delicioso</h2>
             <p>Explora la carta y agrega tus favoritos para empezar el pedido.</p>
             <Link to="/menu" className="btn-primary">
-              Ver el menú <span uk-icon="icon: arrow-right" aria-hidden="true" />
+              Ver el menú <Icon name="arrow-right" />
             </Link>
           </div>
         ) : (
           <>
-            <ol className={styles.steps} aria-label="Progreso del pedido">
-              <li className={styles.currentStep}><span>1</span> Carrito</li>
-              <li><span>2</span> Datos y entrega</li>
-              <li><span>3</span> Confirmación</li>
-            </ol>
-
             <div className={styles.layout}>
             <div>
               <div className={styles.listHeader}>
@@ -70,7 +104,7 @@ export default function Cart() {
                   />
 
                   <div className={styles.lineInfo}>
-                    <h2 className={styles.lineName}>{line.name}</h2>
+                    <h3 className={styles.lineName}>{line.name}</h3>
 
                     {line.options.length > 0 && (
                       <p className={styles.lineDetail}>
@@ -117,12 +151,13 @@ export default function Cart() {
               ))}
             </ul>
             <Link to="/menu" className={styles.continueLink}>
-              <span uk-icon="icon: arrow-left" aria-hidden="true" /> Seguir agregando
+              <Icon name="arrow-left" /> Seguir agregando
             </Link>
 
+              <form id="checkout-form" noValidate onSubmit={handleCheckout}>
               <section className={styles.formCard}>
-                <h2>¿Cómo lo quieres?</h2>
-                <div className={styles.choiceGrid}>
+                <h2 id="cart-delivery-title">¿Cómo lo quieres?</h2>
+                <div className={styles.choiceGrid} role="radiogroup" aria-labelledby="cart-delivery-title">
                   <label className={deliveryType === 'domicilio' ? styles.selectedChoice : styles.choice}>
                     <input
                       type="radio"
@@ -146,32 +181,41 @@ export default function Cart() {
                 </div>
                 <div className={styles.fields}>
                   <label>Nombre
-                    <input value={customer.name} onChange={(event) => setCustomer({ ...customer, name: event.target.value })} />
+                    <input autoComplete="name" required {...fieldProps('name')} />
+                    {fieldError('name')}
                   </label>
                   <label>Teléfono
-                    <input type="tel" value={customer.phone} onChange={(event) => setCustomer({ ...customer, phone: event.target.value })} />
+                    <input type="tel" inputMode="tel" autoComplete="tel" required {...fieldProps('phone')} />
+                    {fieldError('phone')}
                   </label>
-                  <label className={styles.fullField}>Dirección y barrio
-                    <input value={customer.address} onChange={(event) => setCustomer({ ...customer, address: event.target.value })} />
-                  </label>
-                  <label className={styles.fullField}>Notas para tu pedido (opcional)
-                    <input placeholder="Sin cebolla, timbre dañado…" value={customer.notes} onChange={(event) => setCustomer({ ...customer, notes: event.target.value })} />
+                  {!isPickup && (
+                    <label className={styles.fullField}>Dirección y barrio
+                      <input autoComplete="street-address" required {...fieldProps('address')} />
+                      {fieldError('address')}
+                    </label>
+                  )}
+                  <label className={styles.fullField}>
+                    {isPickup ? 'Notas para tu pedido (opcional)' : 'Indicaciones para el domiciliario (opcional)'}
+                    <input autoComplete="off" placeholder={isPickup ? 'Paso a las 8:00 p. m.…' : 'Casa esquinera, timbre dañado…'} {...fieldProps('notes')} />
                   </label>
                 </div>
               </section>
 
               <section className={styles.formCard}>
-                <h2>Método de pago</h2>
-                <label className={paymentMethod === 'efectivo' ? styles.selectedChoice : styles.choice}>
-                  <input type="radio" name="pago" checked={paymentMethod === 'efectivo'} onChange={() => setPaymentMethod('efectivo')} />
-                  Efectivo al recibir
-                </label>
-                <label className={paymentMethod === 'transferencia' ? styles.selectedChoice : styles.choice}>
-                  <input type="radio" name="pago" checked={paymentMethod === 'transferencia'} onChange={() => setPaymentMethod('transferencia')} />
-                  Transferencia / medio de pago
-                </label>
+                <h2 id="cart-payment-title">Método de pago</h2>
+                <div className={styles.choiceList} role="radiogroup" aria-labelledby="cart-payment-title">
+                  <label className={paymentMethod === 'efectivo' ? styles.selectedChoice : styles.choice}>
+                    <input type="radio" name="pago" value="efectivo" checked={paymentMethod === 'efectivo'} onChange={() => setPaymentMethod('efectivo')} />
+                    Efectivo al recibir
+                  </label>
+                  <label className={paymentMethod === 'transferencia' ? styles.selectedChoice : styles.choice}>
+                    <input type="radio" name="pago" value="transferencia" checked={paymentMethod === 'transferencia'} onChange={() => setPaymentMethod('transferencia')} />
+                    Transferencia / medio de pago
+                  </label>
+                </div>
                 <p className={styles.formNote}>Pago de demostración: no se envían datos a ninguna pasarela.</p>
               </section>
+              </form>
             </div>
 
             <aside className={styles.summary} aria-label="Resumen del pedido">
@@ -194,18 +238,38 @@ export default function Cart() {
                 <strong>{formatPrice(total)}</strong>
               </div>
               <button
-                type="button"
+                type="submit"
+                form="checkout-form"
                 className={`btn-primary ${styles.checkout}`}
-                onClick={handleCheckout}
               >
-                Finalizar pedido <span uk-icon="icon: arrow-right" aria-hidden="true" />
+                Finalizar pedido <Icon name="arrow-right" />
               </button>
-              <button type="button" className={styles.clear} onClick={clear}>
-                Vaciar carrito
-              </button>
-              <p className={styles.nextStep}>
-                Confirmarás los detalles de tu pedido en el siguiente paso.
-              </p>
+              {Object.values(errors).some(Boolean) && (
+                <p className={styles.error} role="alert">
+                  Faltan datos de entrega. Revisa los campos marcados.
+                </p>
+              )}
+              {saveFailed && (
+                <p className={styles.error} role="alert">
+                  No pudimos guardar tu pedido en este navegador. Revisa que no
+                  estés en una ventana privada e inténtalo de nuevo.
+                </p>
+              )}
+              {isConfirmingClear ? (
+                <div className={styles.clearConfirm} role="group" aria-label="Confirmar vaciar carrito">
+                  <span>¿Quitar todos los productos?</span>
+                  <button type="button" className={styles.clearYes} onClick={clear}>
+                    Sí, vaciar
+                  </button>
+                  <button type="button" className={styles.clear} onClick={() => setIsConfirmingClear(false)} autoFocus>
+                    Cancelar
+                  </button>
+                </div>
+              ) : (
+                <button type="button" className={styles.clear} onClick={() => setIsConfirmingClear(true)}>
+                  Vaciar carrito
+                </button>
+              )}
             </aside>
             </div>
           </>

@@ -11,20 +11,27 @@
   padding-bottom: 30px;
 }
 
-.footerGrid h3 {
+.footerGrid h2 {
   margin: 0 0 12px;
   color: var(--orange);
   font-size: 14px;
   font-weight: 800;
+  line-height: 1.4;
 }
 
-.footerGrid p,
-.footerGrid > div > a {
-  display: block;
+.footerGrid p {
   margin: 7px 0;
-  color: #c8c4be;
+  color: var(--text-soft);
   font-size: 12px;
   line-height: 1.5;
+}
+
+.footerGrid > div > a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-soft);
+  font-size: 12px;
 }
 
 .footerGrid > div > a:hover {
@@ -33,7 +40,7 @@
 
 .copyright {
   padding: 18px 5%;
-  border-top: 1px solid #333;
+  border-top: 1px solid var(--line);
   color: #aaa;
   text-align: center;
   font-size: 11px;

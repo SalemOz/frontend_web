@@ -8,7 +8,7 @@ export default function ProductImage({ image, alt = '', label = 'Producto', clas
   return (
     <span className={`${styles.frame} ${className ?? ''}`}>
       {image ? (
-        <img className={styles.image} src={image} alt={alt} />
+        <img className={styles.image} src={image} alt={alt} loading="lazy" decoding="async" />
       ) : (
         <span className={styles.placeholder} aria-hidden="true">
           {label}

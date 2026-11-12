@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { formatPrice } from '../data/menu.js';
 import { readLastOrder } from '../utils/order.js';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import styles from './Confirmation.module.css';
 
 const formatOrderDate = (createdAt) => {
@@ -16,6 +17,7 @@ const formatOrderDate = (createdAt) => {
 
 export default function Confirmation() {
   const [order] = useState(readLastOrder);
+  useDocumentTitle('Confirmación');
 
   // Sin pedido guardado no hay nada que confirmar: de vuelta al menú.
   if (!order) return <Navigate to="/menu" replace />;
@@ -26,7 +28,7 @@ export default function Confirmation() {
     <section className={styles.page}>
       <div className="container">
         <span className="eyebrow">PEDIDO RECIBIDO</span>
-        <h1 className={styles.title}>Confirmación</h1>
+        <h1 className="page-title">Confirmación</h1>
         <p className={styles.lead}>
           ¡Gracias por tu pedido! Guarda el número para reclamarlo en el local.
         </p>

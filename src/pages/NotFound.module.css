@@ -2,14 +2,6 @@
   padding: 80px 0 110px;
 }
 
-.title {
-  margin: 6px 0 12px;
-  font-size: clamp(30px, 5vw, 44px);
-  line-height: 1;
-  text-transform: uppercase;
-  color: var(--cream);
-}
-
 .message {
   margin: 0 0 24px;
   color: var(--muted);

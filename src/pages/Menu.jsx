@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { categories, products } from '../data/menu.js';
-import { business } from '../data/business.js';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import ProductCard from '../components/ProductCard.jsx';
 import MiniCart from '../components/MiniCart.jsx';
 import ProductPanel from '../components/ProductPanel.jsx';
@@ -149,17 +149,7 @@ export default function Menu() {
     markAdded(product.id);
   };
 
-  useEffect(() => {
-    const originalTitle = document.title;
-    return () => {
-      document.title = originalTitle;
-    };
-  }, []);
-
-  const pageName = selectedCategory?.name ?? 'Menú';
-  useEffect(() => {
-    document.title = `${pageName} | ${business.name}`;
-  }, [pageName]);
+  useDocumentTitle(selectedCategory?.name ?? 'Menú');
 
   useEffect(() => {
     tabsRef.current
@@ -199,7 +189,7 @@ export default function Menu() {
     <section className={styles.page}>
       <div className="container">
         <span className="eyebrow">NUESTRA CARTA</span>
-        <h1 className={styles.title}>Menú</h1>
+        <h1 className="page-title">Menú</h1>
         <p className={styles.intro}>
           Elige una categoría o busca un producto. Los precios están en pesos
           colombianos.

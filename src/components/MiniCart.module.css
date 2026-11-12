@@ -31,6 +31,7 @@
 
 .link {
   min-height: 44px;
+  white-space: nowrap;
 }
 
 @media (max-width: 600px) {

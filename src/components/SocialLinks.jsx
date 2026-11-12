@@ -1,3 +1,4 @@
+import Icon from './Icon.jsx';
 import styles from './SocialLinks.module.css';
 
 // Sustituir por los perfiles del negocio cuando estén disponibles.
@@ -12,7 +13,7 @@ export default function SocialLinks() {
     <nav className={styles.socialLinks} aria-label="Redes sociales">
       {socialLinks.map(({ name, icon, url }) => (
         <a key={name} href={url} target="_blank" rel="noopener noreferrer" aria-label={`Abrir ${name} en una pestaña nueva`} title={name}>
-          <span uk-icon={`icon: ${icon}; ratio: 1.1`} aria-hidden="true" />
+          <Icon name={icon} ratio={1.1} />
         </a>
       ))}
     </nav>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
+import Icon from './Icon.jsx';
 import styles from './Navbar.module.css';
 
 const linkClassName = ({ isActive }) => (isActive ? styles.active : undefined);
@@ -51,7 +52,7 @@ export default function Navbar() {
         className={styles.cartLink}
         aria-label="Ir al carrito de compras"
       >
-        <span uk-icon="icon: cart; ratio: 1.3" aria-hidden="true"></span>
+        <Icon name="cart" ratio={1.3} />
         <span className={styles.cartCount} aria-live="polite">{count}</span>
       </Link>
     </nav>

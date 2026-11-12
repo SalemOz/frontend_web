@@ -35,7 +35,7 @@
 .productInfo p {
   min-height: 38px;
   margin: 0 0 9px;
-  color: #c8c4be;
+  color: var(--text-soft);
   font-size: 12px;
   line-height: 1.55;
 }
@@ -52,7 +52,7 @@
   display: inline-block;
   margin: 0 0 8px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -65,7 +65,7 @@
 
 .addButton {
   width: 100%;
-  min-height: 37px;
+  min-height: 44px;
   padding: 9px;
   font-size: 11px;
 }
@@ -94,6 +94,6 @@
 
   .addButton {
     gap: 5px;
-    font-size: 10px;
+    font-size: 11px;
   }
 }

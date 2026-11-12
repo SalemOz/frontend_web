@@ -5,7 +5,7 @@ export default function SectionHeading({ eyebrow, title, light = false }) {
     <div
       className={`${styles.sectionHeading} ${light ? styles.headingLight : ''}`}
     >
-      <span>{eyebrow}</span>
+      {eyebrow && <span>{eyebrow}</span>}
       <h2>{title}</h2>
     </div>
   );
