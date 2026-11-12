@@ -30,3 +30,24 @@ export const isOpenAt = (hours, now = new Date()) => {
     ? current >= open && current < close
     : current >= open || current < close;
 };
+
+const MINUTES_PER_DAY = 24 * 60;
+
+/**
+ * Minutos que faltan para el próximo cambio: cierre si está abierto, apertura si no.
+ * @param {{ open: string, close: string, timezone: string }} hours
+ * @param {Date} [now]
+ * @returns {number}
+ */
+export const minutesUntilChange = (hours, now = new Date()) => {
+  const current = minutesInZone(now, hours.timezone);
+  const target = toMinutes(isOpenAt(hours, now) ? hours.close : hours.open);
+  return (target - current + MINUTES_PER_DAY) % MINUTES_PER_DAY;
+};
+
+/** '17:00' → '5:00 p. m.' (formato de la carta). */
+export const formatHour = (hhmm) => {
+  const [hours, minutes] = hhmm.split(':').map(Number);
+  const period = hours < 12 ? 'a. m.' : 'p. m.';
+  return `${hours % 12 || 12}:${String(minutes).padStart(2, '0')} ${period}`;
+};
