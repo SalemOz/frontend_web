@@ -18,6 +18,7 @@ import {
 import { categories, products } from '../data/menu.js';
 
 const CartContext = createContext(null);
+const MAX_ADD_QUANTITY = 20;
 const validProductIds = new Set(products.map((product) => product.id));
 const categoryNames = new Map(categories.map((category) => [category.id, category.name]));
 
@@ -47,18 +48,23 @@ export function CartProvider({ children }) {
    * @param {object} product producto de src/data/menu.js
    * @param {Array<{id: string, name: string, price: number}>} options adicionales elegidos
    * @param {string} note nota libre para la cocina
+   * @param {number} quantity unidades a agregar (1 a 20; cualquier otro valor cuenta como 1)
    */
-  const addItem = useCallback((product, options = [], note = '') => {
+  const addItem = useCallback((product, options = [], note = '', quantity = 1) => {
     const selectedOptions = normalizeOptions(options);
     const lineId = createLineId(product.id, selectedOptions, note);
     const cleanNote = typeof note === 'string' ? note.trim() : '';
+    const safeQuantity =
+      Number.isInteger(quantity) && quantity >= 1 && quantity <= MAX_ADD_QUANTITY
+        ? quantity
+        : 1;
 
     setItems((current) => {
       const existing = current.find((line) => line.lineId === lineId);
 
       if (existing) {
         return current.map((line) =>
-          line.lineId === lineId ? { ...line, qty: line.qty + 1 } : line,
+          line.lineId === lineId ? { ...line, qty: line.qty + safeQuantity } : line,
         );
       }
 
@@ -69,7 +75,7 @@ export function CartProvider({ children }) {
           productId: product.id,
           name: product.name,
           unitPrice: calculateUnitPrice(product.price, selectedOptions),
-          qty: 1,
+          qty: safeQuantity,
           options: selectedOptions,
           note: cleanNote,
           image: product.image ?? '',
