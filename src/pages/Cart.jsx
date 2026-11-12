@@ -8,6 +8,8 @@ import { createOrder, saveLastOrder } from '../utils/order.js';
 import { validateCheckout } from '../utils/checkout.js';
 import Icon from '../components/Icon.jsx';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
+import { useBusinessStatus } from '../hooks/useBusinessStatus.js';
+import { formatHour } from '../utils/hours.js';
 import styles from './Cart.module.css';
 
 export default function Cart() {
@@ -31,6 +33,16 @@ export default function Cart() {
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const isPickup = deliveryType === 'local';
 
+  // Fuera de horario se puede armar el pedido, pero no enviarlo. Se reactiva solo al abrir.
+  const { isOpen } = useBusinessStatus();
+  const opensAt = formatHour(business.hours.open);
+  const checkoutLabel = isOpen ? 'Revisar y enviar' : `Disponible desde las ${opensAt}`;
+  const checkoutProps = {
+    type: 'submit',
+    form: 'checkout-form',
+    'aria-disabled': isOpen ? undefined : true,
+  };
+
   const updateField = (field) => (event) => {
     setCustomer({ ...customer, [field]: event.target.value });
     if (errors[field]) setErrors({ ...errors, [field]: undefined });
@@ -53,6 +65,7 @@ export default function Cart() {
 
   const handleCheckout = (event) => {
     event.preventDefault();
+    if (!isOpen) return;
     const nextErrors = validateCheckout(customer, deliveryType);
     const firstInvalid = ['name', 'phone', 'address'].find((field) => nextErrors[field]);
     setErrors(nextErrors);
@@ -83,6 +96,13 @@ export default function Cart() {
       <div className="container">
         <span className="eyebrow">TU PEDIDO</span>
         <h1 className="page-title">Carrito</h1>
+
+        {!isOpen && (
+          <p className={styles.closedNotice}>
+            <strong>Estamos cerrados.</strong> Abrimos a las {opensAt} Puedes armar tu
+            pedido y finalizarlo cuando abramos.
+          </p>
+        )}
 
         {items.length === 0 ? (
           <div className={styles.empty}>
@@ -244,12 +264,8 @@ export default function Cart() {
                 <span>Total</span>
                 <strong>{formatPrice(total)}</strong>
               </div>
-              <button
-                type="submit"
-                form="checkout-form"
-                className={`btn-primary ${styles.checkout}`}
-              >
-                Revisar y enviar <Icon name="arrow-right" />
+              <button {...checkoutProps} className={`btn-primary ${styles.checkout}`}>
+                {checkoutLabel} {isOpen && <Icon name="arrow-right" />}
               </button>
               {Object.values(errors).some(Boolean) && (
                 <p className={styles.error} role="alert">
@@ -285,8 +301,8 @@ export default function Cart() {
               <p>
                 Total <strong>{formatPrice(total)}</strong>
               </p>
-              <button type="submit" form="checkout-form" className="btn-primary">
-                Revisar y enviar <Icon name="arrow-right" />
+              <button {...checkoutProps} className="btn-primary">
+                {checkoutLabel} {isOpen && <Icon name="arrow-right" />}
               </button>
             </div>
           </>
