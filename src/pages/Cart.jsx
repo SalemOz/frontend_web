@@ -74,7 +74,7 @@ export default function Cart() {
 
                     {line.options.length > 0 && (
                       <p className={styles.lineDetail}>
-                        Adicionales: {line.options.map((option) => option.name).join(', ')}
+                        {line.options.map((option) => option.name).join(' · ')}
                       </p>
                     )}
 
