@@ -12,7 +12,8 @@ export default function ProductCard({ product, categoryName, isAdded = false, on
   const isCustomizable = getProductGroups(product).length > 0;
   const handleSelect = () => onSelect(product);
 
-  let buttonLabel = isCustomizable ? 'Personalizar' : 'Agregar al carrito';
+  // Etiquetas cortas: deben caber en una línea en la tarjeta de móvil (2 columnas).
+  let buttonLabel = isCustomizable ? 'Personalizar' : 'Agregar';
   if (isAdded) buttonLabel = 'Agregado ✓';
 
   return (
@@ -44,6 +45,7 @@ export default function ProductCard({ product, categoryName, isAdded = false, on
         >
           <Icon name="cart" />
           <span aria-live="polite">{buttonLabel}</span>
+          <span className="visually-hidden"> {product.name}</span>
         </button>
       </div>
     </article>
