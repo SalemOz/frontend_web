@@ -157,13 +157,12 @@ export default function Menu() {
       ?.scrollIntoView({ inline: 'center', block: 'nearest' });
   }, [selectedCategory]);
 
-  const productGrid = (items, categoryName) => (
+  const productGrid = (items) => (
     <div className="product-grid">
       {items.map((product) => (
         <ProductCard
           key={product.id}
-          product={product}
-          categoryName={categoryName}
+          product={product}
           isAdded={addedId === product.id}
           onSelect={selectProduct}
         />
@@ -265,14 +264,12 @@ export default function Menu() {
               </header>
 
               {subcategories.length === 0
-                ? productGrid(items, category.name)
+                ? productGrid(items)
                 : subcategories.map((subcategory) => (
                     <section className={styles.subcategory} key={subcategory}>
                       <h3>{subcategory}</h3>
                       {productGrid(
-                        items.filter((product) => product.subcategory === subcategory),
-                        category.name,
-                      )}
+                        items.filter((product) => product.subcategory === subcategory))}
                     </section>
                   ))}
             </section>
@@ -283,10 +280,7 @@ export default function Menu() {
       <MiniCart />
 
       <ProductPanel
-        product={panelProduct}
-        categoryName={
-          categories.find((category) => category.id === panelProduct?.categoryId)?.name
-        }
+        product={panelProduct}
         onAdd={addFromPanel}
         onClose={closePanel}
       />

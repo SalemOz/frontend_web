@@ -1,7 +1,7 @@
 import SectionHeading from './SectionHeading.jsx';
 import ProductCard from './ProductCard.jsx';
 import styles from './Favorites.module.css';
-import { categories, products } from '../data/menu.js';
+import { products } from '../data/menu.js';
 
 const recommendedProductIds = [
   'hamb-clasica',
@@ -10,7 +10,6 @@ const recommendedProductIds = [
   'choripapa-de-la-casa',
 ];
 
-const categoryNames = new Map(categories.map((category) => [category.id, category.name]));
 const recommendedProducts = recommendedProductIds
   .map((id) => products.find((product) => product.id === id))
   .filter(Boolean);
@@ -29,8 +28,7 @@ export default function Favorites({ addedId, onSelect }) {
           {recommendedProducts.map((product) => (
             <ProductCard
               key={product.id}
-              product={product}
-              categoryName={categoryNames.get(product.categoryId)}
+              product={product}
               isAdded={addedId === product.id}
               onSelect={onSelect}
             />

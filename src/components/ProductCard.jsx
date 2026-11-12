@@ -8,7 +8,7 @@ import styles from './ProductCard.module.css';
  * onSelect(product) lo decide quien la usa: abrir el panel si el producto
  * tiene opciones, o agregarlo directo si no.
  */
-export default function ProductCard({ product, categoryName, isAdded = false, onSelect }) {
+export default function ProductCard({ product, isAdded = false, onSelect }) {
   const isCustomizable = getProductGroups(product).length > 0;
   const handleSelect = () => onSelect(product);
 
@@ -27,7 +27,6 @@ export default function ProductCard({ product, categoryName, isAdded = false, on
       <ProductImage
         image={product.image}
         alt={product.name}
-        label={categoryName}
         className={styles.productImage}
       />
       <div className={styles.productInfo}>
