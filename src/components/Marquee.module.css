@@ -1,0 +1,29 @@
+/* Texto --on-orange (#17110a) sobre naranja: 7,9:1. */
+.strip {
+  overflow: hidden;
+  padding: 12px 0;
+  background: var(--orange);
+  color: var(--on-orange);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+}
+
+.copy {
+  flex: none;
+  padding-right: 0.5em;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-stretch: var(--stretch-display);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .copy {
+    font-size: 14px;
+  }
+}

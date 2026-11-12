@@ -4,6 +4,7 @@ import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
 import PageBoundary from './PageBoundary.jsx';
 import { PageTransition } from '../motion/PageTransition.jsx';
+import ScrollProgress from './ScrollProgress.jsx';
 
 export default function Layout() {
   const location = useLocation();
@@ -58,6 +59,7 @@ export default function Layout() {
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>
+      <ScrollProgress />
       <Navbar />
       <main ref={mainRef} id="contenido" tabIndex={-1}>
         {/* key: un error en una página no bloquea las demás al navegar. */}
