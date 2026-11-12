@@ -71,7 +71,7 @@ export default function Cart() {
                   />
 
                   <div className={styles.lineInfo}>
-                    <h2 className={styles.lineName}>{line.name}</h2>
+                    <h3 className={styles.lineName}>{line.name}</h3>
 
                     {line.options.length > 0 && (
                       <p className={styles.lineDetail}>

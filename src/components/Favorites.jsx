@@ -22,6 +22,7 @@ export default function Favorites({ addedId, onSelect }) {
         <SectionHeading
           eyebrow="SELECCIÓN DE LA CASA"
           title="Recomendados de la casa"
+          light
         />
         {/* .product-grid vive en global.css. */}
         <div className="product-grid">

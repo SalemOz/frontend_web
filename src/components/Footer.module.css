@@ -11,11 +11,12 @@
   padding-bottom: 30px;
 }
 
-.footerGrid h3 {
+.footerGrid h2 {
   margin: 0 0 12px;
   color: var(--orange);
   font-size: 14px;
   font-weight: 800;
+  line-height: 1.4;
 }
 
 .footerGrid p,
