@@ -1,7 +1,8 @@
-import { Suspense, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
+import PageBoundary from './PageBoundary.jsx';
 
 export default function Layout() {
   const location = useLocation();
@@ -39,9 +40,10 @@ export default function Layout() {
     <>
       <Navbar />
       <main ref={mainRef} tabIndex={-1}>
-        <Suspense fallback={null}>
+        {/* key: un error en una página no bloquea las demás al navegar. */}
+        <PageBoundary key={location.pathname}>
           <Outlet />
-        </Suspense>
+        </PageBoundary>
       </main>
       <Footer />
     </>

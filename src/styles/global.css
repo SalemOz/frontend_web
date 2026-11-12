@@ -171,6 +171,13 @@ button:focus-visible {
 
 /* ---------- Compartidas por varios componentes ---------- */
 
+/* Carga y error de página (PageBoundary). */
+.page-status {
+  min-height: 50vh;
+  padding-block: 56px 90px;
+  color: var(--muted);
+}
+
 /* Título principal de Menú, Carrito, Confirmación y 404. */
 .page-title {
   margin: 6px 0 12px;
