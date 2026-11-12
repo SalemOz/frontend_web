@@ -5,6 +5,7 @@ import { formatPrice } from '../data/menu.js';
 import { business } from '../data/business.js';
 import ProductImage from '../components/ProductImage.jsx';
 import { createOrder, saveLastOrder } from '../utils/order.js';
+import Icon from '../components/Icon.jsx';
 import styles from './Cart.module.css';
 
 export default function Cart() {
@@ -38,11 +39,11 @@ export default function Cart() {
 
         {items.length === 0 ? (
           <div className={styles.empty}>
-            <span className={styles.emptyIcon} uk-icon="icon: cart; ratio: 2" aria-hidden="true" />
+            <Icon name="cart" ratio={2} className={styles.emptyIcon} />
             <h2>Tu carrito está esperando algo delicioso</h2>
             <p>Explora la carta y agrega tus favoritos para empezar el pedido.</p>
             <Link to="/menu" className="btn-primary">
-              Ver el menú <span uk-icon="icon: arrow-right" aria-hidden="true" />
+              Ver el menú <Icon name="arrow-right" />
             </Link>
           </div>
         ) : (
@@ -117,7 +118,7 @@ export default function Cart() {
               ))}
             </ul>
             <Link to="/menu" className={styles.continueLink}>
-              <span uk-icon="icon: arrow-left" aria-hidden="true" /> Seguir agregando
+              <Icon name="arrow-left" /> Seguir agregando
             </Link>
 
               <section className={styles.formCard}>
@@ -198,7 +199,7 @@ export default function Cart() {
                 className={`btn-primary ${styles.checkout}`}
                 onClick={handleCheckout}
               >
-                Finalizar pedido <span uk-icon="icon: arrow-right" aria-hidden="true" />
+                Finalizar pedido <Icon name="arrow-right" />
               </button>
               <button type="button" className={styles.clear} onClick={clear}>
                 Vaciar carrito

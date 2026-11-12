@@ -26,6 +26,99 @@
   box-sizing: border-box;
 }
 
+/* ---------- Base tipográfica ----------
+   Heredada del reset de UIkit, que se quitó: mismos márgenes y tamaños
+   para que nada cambie de sitio. */
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: normal;
+  color: #333;
+}
+
+h1 {
+  font-size: 2.23125rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.7rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+@media (min-width: 960px) {
+  h1 {
+    font-size: 2.625rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+* + h1,
+* + h2,
+* + h3,
+* + h4 {
+  margin-top: 40px;
+}
+
+p,
+ul,
+ol,
+dl,
+fieldset {
+  margin: 0 0 20px;
+}
+
+* + p {
+  margin-top: 20px;
+}
+
+ul,
+ol {
+  padding-left: 30px;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 0;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+em {
+  color: #f0506e;
+}
+
+.icon {
+  display: inline-block;
+  line-height: 0;
+}
+
 html {
   scroll-behavior: smooth;
   /* El panel de producto bloquea el scroll: sin esto la página salta de ancho. */

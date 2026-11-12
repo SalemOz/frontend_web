@@ -1,6 +1,7 @@
 import { formatPrice } from '../data/menu.js';
 import { getProductGroups } from '../utils/product.js';
 import ProductImage from './ProductImage.jsx';
+import Icon from './Icon.jsx';
 import styles from './ProductCard.module.css';
 
 /**
@@ -41,8 +42,7 @@ export default function ProductCard({ product, categoryName, isAdded = false, on
           onClick={isCustomizable ? undefined : handleSelect}
           data-add-button
         >
-          {/* El icono no se desmonta: UIkit le inyecta el SVG. */}
-          <span uk-icon="icon: cart" aria-hidden="true" />
+          <Icon name="cart" />
           <span aria-live="polite">{buttonLabel}</span>
         </button>
       </div>

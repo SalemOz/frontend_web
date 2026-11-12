@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Icon from './Icon.jsx';
 import styles from './Hero.module.css';
 
 export default function Hero() {
@@ -27,7 +28,7 @@ export default function Hero() {
           Elige, personaliza y pide en menos de un minuto.
         </p>
         <Link to="/menu" className="btn-primary">
-          EXPLORAR MENÚ <span uk-icon="arrow-right"></span>
+          EXPLORAR MENÚ <Icon name="arrow-right" />
         </Link>
       </div>
 
